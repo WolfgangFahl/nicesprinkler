@@ -41,16 +41,14 @@ class NiceSprinklerCmd(WebserverCmd):
             help="show verbose output [default: %(default)s]",
         )
         parser.add_argument(
-            "-c",
             "--config",
-            default="sprinkler_config.json",
+            default="example_config.yaml",
             help="path to sprinkler configuration file [default: %(default)s]",
         )
         parser.add_argument(
-            "-s",
-            "--simulate",
-            action="store_true",
-            help="run simulation without starting the web server",
+            "--stl",
+            default="example_garden.stl",
+            help="path to sprinkler configuration file [default: %(default)s]",
         )
         return parser
 

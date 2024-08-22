@@ -19,7 +19,9 @@ dependencies = [
     # fastapi
 	# uvicorn
     "nicegui>=1.4.32",
-    "ngwidgets>=0.16.7",
+    "ngwidgets>=0.17.2",
+    # https://github.com/WoLpH/numpy-stl
+	"numpy-stl>=3.1.2"
 ]
 
 requires-python = ">=3.9"

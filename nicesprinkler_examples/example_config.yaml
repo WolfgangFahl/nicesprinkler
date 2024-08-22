@@ -1,37 +1,20 @@
 # nicesprinkler example configuration
-#
+# 2024-08-22 WF
+# Updated nicesprinkler example configuration
 
 lawn:
   width: 6.0
   length: 11.0
-
-sprinkler:
-  position:
-    x: 3.0
-    y: 0.0
-    z: 1.2
-  initial_angles:
-    horizontal: 0
-    vertical: 45
-
-boundaries:
-  left:
-    type: hedge
-    height: 1.8
-    distance: 0.0
-  back:
-    type: fence
-    height: 1.0
-    distance: 15.0
-  right:
-    type: fence
-    height: 1.0
-    distance: 0.0
-
+sprinkler_position:
+  x: 3.0
+  y: 0.0
+  z: 1.2
+initial_angles:
+  horizontal: 0
+  vertical: 45
 hose_performance:
   max_distance: 8.0
   optimal_angle: 45
-
 motors:
   horizontal:
     ena_pin: 37

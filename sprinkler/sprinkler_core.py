@@ -1,5 +1,5 @@
 '''
-Created on 13.08.2024
+Created on 2024-08-13
 
 @author: wf
 '''
@@ -7,6 +7,8 @@ Created on 13.08.2024
 from ngwidgets.yamlable import lod_storable
 from dataclasses import field
 from typing import Dict
+import numpy as np
+from stl import mesh
 
 @lod_storable
 class Lawn:
@@ -32,15 +34,6 @@ class Angles:
     """
     horizontal: float
     vertical: float
-
-@lod_storable
-class Boundary:
-    """
-    Boundary information
-    """
-    type: str
-    height: float
-    distance: float
 
 @lod_storable
 class HosePerformance:
@@ -71,7 +64,6 @@ class SprinklerConfig:
     sprinkler_position: SprinklerPosition
     initial_angles: Angles
     hose_performance: HosePerformance
-    boundaries: Dict[str, Boundary] = field(default_factory=dict)
     motors: Dict[str, MotorConfig] = field(default_factory=dict)
 
 
@@ -79,16 +71,54 @@ class SprinklerSystem:
     """
     Main sprinkler system class
     """
-    config: SprinklerConfig
+
+    def __init__(self, config_path: str, stl_file_path: str):
+        self.config = SprinklerConfig.load_from_yaml_file(config_path)
+        self.stl_mesh = mesh.Mesh.from_file(stl_file_path)
+        self.stl_analysis = self.analyze_stl()
+
+
+    def analyze_stl(self):
+        """Analyze the STL file to determine key points for spray calculation"""
+        stl_min = np.min(self.stl_mesh.vectors, axis=(0, 1))
+        stl_max = np.max(self.stl_mesh.vectors, axis=(0, 1))
+        stl_dimensions = stl_max - stl_min
+        spray_origin = self.get_spray_origin()
+        return {
+            'min': stl_min,
+            'max': stl_max,
+            'dimensions': stl_dimensions,
+            'spray_origin': spray_origin
+        }
+
+    def get_spray_origin(self):
+        """Get the spray origin from the config"""
+        return np.array([
+            self.config.sprinkler_position.x,
+            self.config.sprinkler_position.y,
+            self.config.sprinkler_position.z
+        ])
 
     def calculate_spray_points(self):
-        # Implementation
-        pass
+        spray_points = []
+        for h_angle in range(-90, 91, 5):  # horizontal angles from -90 to 90 in 5-degree steps
+            for v_angle in range(10, 61, 5):  # vertical angles from 10 to 60 in 5-degree steps
+                distance = self.calculate_spray_distance(v_angle)
+                x = self.stl_analysis['spray_origin'][0] + distance * np.cos(np.radians(h_angle))
+                y = self.stl_analysis['spray_origin'][1] + distance * np.sin(np.radians(h_angle))
+                spray_height = self.stl_analysis['spray_origin'][2] + distance * np.tan(np.radians(v_angle))
+
+                if self.is_point_within_boundaries(x, y, spray_height):
+                    spray_points.append((h_angle, v_angle, distance))
+
+        return spray_points
 
     def is_point_within_boundaries(self, x: float, y: float, spray_height: float) -> bool:
-        # Implementation
-        pass
+        return (0 <= x <= self.config.lawn.width and
+                0 <= y <= self.config.lawn.length)
 
     def calculate_spray_distance(self, angle: float) -> float:
-        # Implementation
-        pass
+        v0 = np.sqrt(self.config.hose_performance.max_distance * 9.8 /
+                     np.sin(2 * np.radians(self.config.hose_performance.optimal_angle)))
+        t = 2 * v0 * np.sin(np.radians(angle)) / 9.8
+        return v0 * np.cos(np.radians(angle)) * t
