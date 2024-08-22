@@ -1,0 +1,3003 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.30">
+    
+    
+      
+        <title>nicesprinkler API Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.3cba04c6.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#nicesprinkler-api-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="nicesprinkler API Documentation" class="md-header__button md-logo" aria-label="nicesprinkler API Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            nicesprinkler API Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="nicesprinkler API Documentation" class="md-nav__button md-logo" aria-label="nicesprinkler API Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    nicesprinkler API Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      controller
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.model" class="md-nav__link">
+    <span class="md-ellipsis">
+      model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler_cmd
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sprinkler_cmd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.NiceSprinklerCmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      NiceSprinklerCmd
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NiceSprinklerCmd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.NiceSprinklerCmd.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.NiceSprinklerCmd.getArgParser" class="md-nav__link">
+    <span class="md-ellipsis">
+      getArgParser
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      main
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler_core
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sprinkler_core">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.Angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Angles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.HosePerformance" class="md-nav__link">
+    <span class="md-ellipsis">
+      HosePerformance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.Lawn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lawn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.MotorConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      MotorConfig
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerConfig
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerPosition" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerPosition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerSystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerSystem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SprinklerSystem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerSystem.analyze_stl" class="md-nav__link">
+    <span class="md-ellipsis">
+      analyze_stl
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerSystem.get_spray_origin" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_spray_origin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler_sim
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sprinkler_sim">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_sim.SprinklerSimulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerSimulation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.stepper" class="md-nav__link">
+    <span class="md-ellipsis">
+      stepper
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.version" class="md-nav__link">
+    <span class="md-ellipsis">
+      version
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="version">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.version.Version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.webserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      webserver
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="webserver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      NiceSprinklerSolution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NiceSprinklerSolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.configure_settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      configure_settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.home" class="md-nav__link">
+    <span class="md-ellipsis">
+      home
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.reset_simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_simulation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.update_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      update_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerWebServer" class="md-nav__link">
+    <span class="md-ellipsis">
+      NiceSprinklerWebServer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NiceSprinklerWebServer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerWebServer.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerWebServer.configure_run" class="md-nav__link">
+    <span class="md-ellipsis">
+      configure_run
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      controller
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.model" class="md-nav__link">
+    <span class="md-ellipsis">
+      model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler_cmd
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sprinkler_cmd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.NiceSprinklerCmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      NiceSprinklerCmd
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NiceSprinklerCmd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.NiceSprinklerCmd.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.NiceSprinklerCmd.getArgParser" class="md-nav__link">
+    <span class="md-ellipsis">
+      getArgParser
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_cmd.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      main
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler_core
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sprinkler_core">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.Angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Angles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.HosePerformance" class="md-nav__link">
+    <span class="md-ellipsis">
+      HosePerformance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.Lawn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lawn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.MotorConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      MotorConfig
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerConfig
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerPosition" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerPosition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerSystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerSystem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SprinklerSystem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerSystem.analyze_stl" class="md-nav__link">
+    <span class="md-ellipsis">
+      analyze_stl
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_core.SprinklerSystem.get_spray_origin" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_spray_origin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      sprinkler_sim
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="sprinkler_sim">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.sprinkler_sim.SprinklerSimulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      SprinklerSimulation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.stepper" class="md-nav__link">
+    <span class="md-ellipsis">
+      stepper
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.version" class="md-nav__link">
+    <span class="md-ellipsis">
+      version
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="version">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.version.Version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Version
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprinkler.webserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      webserver
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="webserver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      NiceSprinklerSolution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NiceSprinklerSolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.configure_settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      configure_settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.home" class="md-nav__link">
+    <span class="md-ellipsis">
+      home
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.reset_simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_simulation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerSolution.update_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      update_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerWebServer" class="md-nav__link">
+    <span class="md-ellipsis">
+      NiceSprinklerWebServer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NiceSprinklerWebServer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerWebServer.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprinkler.webserver.NiceSprinklerWebServer.configure_run" class="md-nav__link">
+    <span class="md-ellipsis">
+      configure_run
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="nicesprinkler-api-documentation">nicesprinkler API Documentation</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="sprinkler"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.controller" class="doc doc-heading">
+            <code>controller</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 13.08.2024</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.model" class="doc doc-heading">
+            <code>model</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 13.08.2024</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.sprinkler_cmd" class="doc doc-heading">
+            <code>sprinkler_cmd</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 13.08.2024</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_cmd.NiceSprinklerCmd" class="doc doc-heading">
+            <code>NiceSprinklerCmd</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="ngwidgets.cmd.WebserverCmd">WebserverCmd</span></code></p>
+
+
+      <p>command line handling for nicesprinkler</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_cmd.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">NiceSprinklerCmd</span><span class="p">(</span><span class="n">WebserverCmd</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    command line handling for nicesprinkler</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">NiceSprinklerWebServer</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+        <span class="n">WebserverCmd</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">NiceSprinklerWebServer</span><span class="p">,</span> <span class="n">DEBUG</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">getArgParser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version_msg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        override the default argparser call</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getArgParser</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">version_msg</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;show verbose output [default: </span><span class="si">%(default)s</span><span class="s2">]&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--config&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;example_config.yaml&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to sprinkler configuration file [default: </span><span class="si">%(default)s</span><span class="s2">]&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--stl&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;example_garden.stl&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to sprinkler configuration file [default: </span><span class="si">%(default)s</span><span class="s2">]&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.sprinkler_cmd.NiceSprinklerCmd.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>constructor</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/sprinkler_cmd.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    constructor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">NiceSprinklerWebServer</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+    <span class="n">WebserverCmd</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">NiceSprinklerWebServer</span><span class="p">,</span> <span class="n">DEBUG</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.sprinkler_cmd.NiceSprinklerCmd.getArgParser" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">getArgParser</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">version_msg</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>override the default argparser call</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/sprinkler_cmd.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">getArgParser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version_msg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    override the default argparser call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getArgParser</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">version_msg</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;show verbose output [default: </span><span class="si">%(default)s</span><span class="s2">]&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--config&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;example_config.yaml&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to sprinkler configuration file [default: </span><span class="si">%(default)s</span><span class="s2">]&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--stl&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;example_garden.stl&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to sprinkler configuration file [default: </span><span class="si">%(default)s</span><span class="s2">]&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="sprinkler.sprinkler_cmd.main" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+      <p>main call</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/sprinkler_cmd.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    main call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="n">NiceSprinklerCmd</span><span class="p">()</span>
+    <span class="n">exit_code</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">cmd_main</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">exit_code</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.sprinkler_core" class="doc doc-heading">
+            <code>sprinkler_core</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 2024-08-13</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.Angles" class="doc doc-heading">
+            <code>Angles</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Initial angles for the sprinkler</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@lod_storable</span>
+<span class="k">class</span> <span class="nc">Angles</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initial angles for the sprinkler</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">horizontal</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">vertical</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.HosePerformance" class="doc doc-heading">
+            <code>HosePerformance</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Hose performance specifications</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@lod_storable</span>
+<span class="k">class</span> <span class="nc">HosePerformance</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hose performance specifications</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_distance</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">optimal_angle</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.Lawn" class="doc doc-heading">
+            <code>Lawn</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Lawn dimensions in meters</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@lod_storable</span>
+<span class="k">class</span> <span class="nc">Lawn</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lawn dimensions in meters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">length</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.MotorConfig" class="doc doc-heading">
+            <code>MotorConfig</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Configuration for a single motor</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@lod_storable</span>
+<span class="k">class</span> <span class="nc">MotorConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configuration for a single motor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ena_pin</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">dir_pin</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pul_pin</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">steps_per_revolution</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">min_angle</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">max_angle</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.SprinklerConfig" class="doc doc-heading">
+            <code>SprinklerConfig</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Complete configuration for the sprinkler system</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@lod_storable</span>
+<span class="k">class</span> <span class="nc">SprinklerConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Complete configuration for the sprinkler system</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lawn</span><span class="p">:</span> <span class="n">Lawn</span>
+    <span class="n">sprinkler_position</span><span class="p">:</span> <span class="n">SprinklerPosition</span>
+    <span class="n">initial_angles</span><span class="p">:</span> <span class="n">Angles</span>
+    <span class="n">hose_performance</span><span class="p">:</span> <span class="n">HosePerformance</span>
+    <span class="n">motors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MotorConfig</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.SprinklerPosition" class="doc doc-heading">
+            <code>SprinklerPosition</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Sprinkler position in the lawn</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@lod_storable</span>
+<span class="k">class</span> <span class="nc">SprinklerPosition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sprinkler position in the lawn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">float</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_core.SprinklerSystem" class="doc doc-heading">
+            <code>SprinklerSystem</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>Main sprinkler system class</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SprinklerSystem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main sprinkler system class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stl_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">SprinklerConfig</span><span class="o">.</span><span class="n">load_from_yaml_file</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stl_mesh</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">Mesh</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">stl_file_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stl_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_stl</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">analyze_stl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze the STL file to determine key points for spray calculation&quot;&quot;&quot;</span>
+        <span class="n">stl_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stl_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">stl_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stl_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">stl_dimensions</span> <span class="o">=</span> <span class="n">stl_max</span> <span class="o">-</span> <span class="n">stl_min</span>
+        <span class="n">spray_origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spray_origin</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">stl_min</span><span class="p">,</span>
+            <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="n">stl_max</span><span class="p">,</span>
+            <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">stl_dimensions</span><span class="p">,</span>
+            <span class="s1">&#39;spray_origin&#39;</span><span class="p">:</span> <span class="n">spray_origin</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_spray_origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the spray origin from the config&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span><span class="o">.</span><span class="n">z</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">calculate_spray_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">spray_points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">h_angle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>  <span class="c1"># horizontal angles from -90 to 90 in 5-degree steps</span>
+            <span class="k">for</span> <span class="n">v_angle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>  <span class="c1"># vertical angles from 10 to 60 in 5-degree steps</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_spray_distance</span><span class="p">(</span><span class="n">v_angle</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stl_analysis</span><span class="p">[</span><span class="s1">&#39;spray_origin&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">h_angle</span><span class="p">))</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stl_analysis</span><span class="p">[</span><span class="s1">&#39;spray_origin&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">h_angle</span><span class="p">))</span>
+                <span class="n">spray_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stl_analysis</span><span class="p">[</span><span class="s1">&#39;spray_origin&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">v_angle</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_point_within_boundaries</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">spray_height</span><span class="p">):</span>
+                    <span class="n">spray_points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">h_angle</span><span class="p">,</span> <span class="n">v_angle</span><span class="p">,</span> <span class="n">distance</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">spray_points</span>
+
+    <span class="k">def</span> <span class="nf">is_point_within_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">spray_height</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">lawn</span><span class="o">.</span><span class="n">width</span> <span class="ow">and</span>
+                <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">lawn</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">calculate_spray_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">v0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">hose_performance</span><span class="o">.</span><span class="n">max_distance</span> <span class="o">*</span> <span class="mf">9.8</span> <span class="o">/</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">hose_performance</span><span class="o">.</span><span class="n">optimal_angle</span><span class="p">)))</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">/</span> <span class="mf">9.8</span>
+        <span class="k">return</span> <span class="n">v0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">*</span> <span class="n">t</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.sprinkler_core.SprinklerSystem.analyze_stl" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">analyze_stl</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Analyze the STL file to determine key points for spray calculation</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">analyze_stl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze the STL file to determine key points for spray calculation&quot;&quot;&quot;</span>
+    <span class="n">stl_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stl_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">stl_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stl_mesh</span><span class="o">.</span><span class="n">vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">stl_dimensions</span> <span class="o">=</span> <span class="n">stl_max</span> <span class="o">-</span> <span class="n">stl_min</span>
+    <span class="n">spray_origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_spray_origin</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">stl_min</span><span class="p">,</span>
+        <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="n">stl_max</span><span class="p">,</span>
+        <span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">stl_dimensions</span><span class="p">,</span>
+        <span class="s1">&#39;spray_origin&#39;</span><span class="p">:</span> <span class="n">spray_origin</span>
+    <span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.sprinkler_core.SprinklerSystem.get_spray_origin" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_spray_origin</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Get the spray origin from the config</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/sprinkler_core.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_spray_origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the spray origin from the config&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span><span class="o">.</span><span class="n">z</span>
+    <span class="p">])</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.sprinkler_sim" class="doc doc-heading">
+            <code>sprinkler_sim</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 2024-08-13</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.sprinkler_sim.SprinklerSimulation" class="doc doc-heading">
+            <code>SprinklerSimulation</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+      <p>A sprinkler simulation</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/sprinkler_sim.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SprinklerSimulation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A sprinkler simulation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sprinkler_system</span><span class="p">:</span> <span class="n">SprinklerSystem</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="n">sprinkler_system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_scene</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">setup_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">scene</span><span class="p">(</span>
+            <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+            <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">background_color</span><span class="o">=</span><span class="s1">&#39;#87CEEB&#39;</span>  <span class="c1"># Sky blue</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="s1">&#39;w-full h-64&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Add lawn</span>
+        <span class="n">lawn_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">lawn</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">lawn_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">lawn</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">y</span><span class="o">=-</span><span class="mf">0.01</span><span class="p">):</span>  <span class="c1"># Slightly below zero to avoid z-fighting with the grid</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">lawn_width</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">lawn_length</span><span class="p">)</span><span class="o">.</span><span class="n">material</span><span class="p">(</span><span class="s1">&#39;#7CFC00&#39;</span><span class="p">)</span>  <span class="c1"># Lawn green</span>
+
+
+        <span class="c1"># Add sprinkler</span>
+        <span class="n">sprinkler_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">z</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cylinder</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">material</span><span class="p">(</span><span class="s1">&#39;#808080&#39;</span><span class="p">)</span>  <span class="c1"># Grey cylinder for sprinkler base</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_head</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">sphere</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span><span class="o">.</span><span class="n">material</span><span class="p">(</span><span class="s1">&#39;#4682B4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Steel blue sphere for sprinkler head</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">move_camera</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">lawn_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="n">lawn_length</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">lawn_length</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">look_at_x</span><span class="o">=</span><span class="n">lawn_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">look_at_y</span><span class="o">=</span><span class="n">lawn_length</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">look_at_z</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">simulate_sprinkler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">spray_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">calculate_spray_points</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">h_angle</span><span class="p">,</span> <span class="n">v_angle</span><span class="p">,</span> <span class="n">distance</span> <span class="ow">in</span> <span class="n">spray_points</span><span class="p">:</span>
+            <span class="c1"># Move sprinkler head</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_head</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Reset to original position</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_head</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">h_angle</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v_angle</span><span class="p">)</span>
+
+            <span class="c1"># Show water spray</span>
+            <span class="n">sprinkler_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sprinkler_position</span>
+            <span class="n">end_x</span> <span class="o">=</span> <span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">h_angle</span><span class="p">))</span>
+            <span class="n">end_y</span> <span class="o">=</span> <span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">h_angle</span><span class="p">))</span>
+            <span class="n">end_z</span> <span class="o">=</span> <span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">v_angle</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">line</span><span class="p">([</span><span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sprinkler_pos</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">],</span>
+                            <span class="p">[</span><span class="n">end_x</span><span class="p">,</span> <span class="n">end_y</span><span class="p">,</span> <span class="n">end_z</span><span class="p">])</span><span class="o">.</span><span class="n">material</span><span class="p">(</span><span class="s1">&#39;#1E90FF&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Light blue, semi-transparent</span>
+
+            <span class="n">ui</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># Small delay to visualize movement</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.stepper" class="doc doc-heading">
+            <code>stepper</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 13.08.2024</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.version" class="doc doc-heading">
+            <code>version</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 2024-08-13</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.version.Version" class="doc doc-heading">
+            <code>Version</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code>object</code></p>
+
+
+      <p>Version handling for nicesprinkler</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/version.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Version</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Version handling for nicesprinkler</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;nicesprinkler&quot;</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">sprinkler</span><span class="o">.</span><span class="n">__version__</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="s2">&quot;2024-08-13&quot;</span>
+    <span class="n">updated</span> <span class="o">=</span> <span class="s2">&quot;2024-08-10&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Computer Controlled 2 Stepper motor 3D lawn sprinkler system&quot;</span>
+
+    <span class="n">authors</span> <span class="o">=</span> <span class="s2">&quot;Wolfgang Fahl&quot;</span>
+
+    <span class="n">doc_url</span> <span class="o">=</span> <span class="s2">&quot;https://wiki.bitplan.com/index.php/nicesprinkler&quot;</span>
+    <span class="n">chat_url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/WolfgangFahl/nicesprinkler/discussions&quot;</span>
+    <span class="n">cm_url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/WolfgangFahl/nicesprinkler&quot;</span>
+
+    <span class="n">license</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Copyright 2024 contributors. All rights reserved.</span>
+
+<span class="s2">  Licensed under the Apache License 2.0</span>
+<span class="s2">  http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="s2">  Distributed on an &quot;AS IS&quot; basis without warranties</span>
+<span class="s2">  or conditions of any kind, either express or implied.&quot;&quot;&quot;</span>
+    <span class="n">longDescription</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> version </span><span class="si">{</span><span class="n">version</span><span class="si">}</span>
+<span class="si">{</span><span class="n">description</span><span class="si">}</span>
+
+<span class="s2">  Created by </span><span class="si">{</span><span class="n">authors</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> last updated </span><span class="si">{</span><span class="n">updated</span><span class="si">}</span><span class="s2">&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="sprinkler.webserver" class="doc doc-heading">
+            <code>webserver</code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Created on 13.08.2024</p>
+<p>@author: wf</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.webserver.NiceSprinklerSolution" class="doc doc-heading">
+            <code>NiceSprinklerSolution</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="ngwidgets.input_webserver.InputWebSolution">InputWebSolution</span></code></p>
+
+
+      <p>the NiceSprinkler solution</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">NiceSprinklerSolution</span><span class="p">(</span><span class="n">InputWebSolution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    the NiceSprinkler solution</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">webserver</span><span class="p">:</span> <span class="n">NiceSprinklerWebServer</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the solution</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            webserver (NiceSprinklerWebServer): The webserver instance associated with this context.</span>
+<span class="sd">            client (Client): The client instance this context is associated with.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">webserver</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the home page with a 3D viewer and controls for the sprinkler.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_menu</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">ui</span><span class="o">.</span><span class="n">column</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span> <span class="o">=</span> <span class="n">SprinklerSimulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">setup_scene</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">ui</span><span class="o">.</span><span class="n">row</span><span class="p">():</span>
+                <span class="n">ui</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Start Simulation&#39;</span><span class="p">,</span> <span class="n">on_click</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">simulate_sprinkler</span><span class="p">)</span>
+                <span class="n">ui</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Reset&#39;</span><span class="p">,</span> <span class="n">on_click</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_simulation</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup_footer</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the simulation to its initial state.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">setup_scene</span><span class="p">()</span>
+        <span class="n">ui</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s1">&#39;Simulation reset&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">configure_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the settings page with options to modify sprinkler configuration.&quot;&quot;&quot;</span>
+        <span class="n">config_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">()</span>
+        <span class="n">ui</span><span class="o">.</span><span class="n">textarea</span><span class="p">(</span><span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">config_str</span><span class="p">)</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="s2">&quot;w-full&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the simulation configuration based on user input.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">new_config</span> <span class="o">=</span> <span class="n">SprinklerConfig</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">new_config</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_simulation</span><span class="p">()</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s1">&#39;Configuration updated successfully&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error updating configuration: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerSolution.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">webserver</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Initialize the solution</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>webserver</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="sprinkler.webserver.NiceSprinklerWebServer" href="#sprinkler.webserver.NiceSprinklerWebServer">NiceSprinklerWebServer</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The webserver instance associated with this context.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>client</code></td>
+            <td>
+                  <code><span title="nicegui.Client">Client</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The client instance this context is associated with.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">webserver</span><span class="p">:</span> <span class="n">NiceSprinklerWebServer</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the solution</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        webserver (NiceSprinklerWebServer): The webserver instance associated with this context.</span>
+<span class="sd">        client (Client): The client instance this context is associated with.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">webserver</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerSolution.configure_settings" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">configure_settings</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Generates the settings page with options to modify sprinkler configuration.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">configure_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates the settings page with options to modify sprinkler configuration.&quot;&quot;&quot;</span>
+    <span class="n">config_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">()</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">textarea</span><span class="p">(</span><span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">config_str</span><span class="p">)</span><span class="o">.</span><span class="n">classes</span><span class="p">(</span><span class="s2">&quot;w-full&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerSolution.home" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">home</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Generates the home page with a 3D viewer and controls for the sprinkler.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates the home page with a 3D viewer and controls for the sprinkler.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setup_menu</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">ui</span><span class="o">.</span><span class="n">column</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span> <span class="o">=</span> <span class="n">SprinklerSimulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">setup_scene</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">ui</span><span class="o">.</span><span class="n">row</span><span class="p">():</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Start Simulation&#39;</span><span class="p">,</span> <span class="n">on_click</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">simulate_sprinkler</span><span class="p">)</span>
+            <span class="n">ui</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="s1">&#39;Reset&#39;</span><span class="p">,</span> <span class="n">on_click</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_simulation</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup_footer</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerSolution.reset_simulation" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reset_simulation</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Resets the simulation to its initial state.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">reset_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resets the simulation to its initial state.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">setup_scene</span><span class="p">()</span>
+    <span class="n">ui</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s1">&#39;Simulation reset&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerSolution.update_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">update_config</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Updates the simulation configuration based on user input.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Updates the simulation configuration based on user input.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">new_config</span> <span class="o">=</span> <span class="n">SprinklerConfig</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">new_config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">webserver</span><span class="o">.</span><span class="n">sprinkler_system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_simulation</span><span class="p">()</span>
+        <span class="n">ui</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s1">&#39;Configuration updated successfully&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="n">ui</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error updating configuration: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sprinkler.webserver.NiceSprinklerWebServer" class="doc doc-heading">
+            <code>NiceSprinklerWebServer</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="ngwidgets.input_webserver.InputWebserver">InputWebserver</span></code></p>
+
+
+      <p>WebServer class that manages the server and handles Sprinkler operations.</p>
+
+              <details class="quote">
+                <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">NiceSprinklerWebServer</span><span class="p">(</span><span class="n">InputWebserver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;WebServer class that manages the server and handles Sprinkler operations.&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebserverConfig</span><span class="p">:</span>
+        <span class="n">copy_right</span> <span class="o">=</span> <span class="s2">&quot;(c)2024 Wolfgang Fahl&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">WebserverConfig</span><span class="p">(</span>
+            <span class="n">copy_right</span><span class="o">=</span><span class="n">copy_right</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="n">Version</span><span class="p">(),</span>
+            <span class="n">default_port</span><span class="o">=</span><span class="mi">9859</span><span class="p">,</span>
+            <span class="n">short_name</span><span class="o">=</span><span class="s2">&quot;nicesprinkler&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">server_config</span> <span class="o">=</span> <span class="n">WebserverConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">server_config</span><span class="o">.</span><span class="n">solution_class</span> <span class="o">=</span> <span class="n">NiceSprinklerSolution</span>
+        <span class="k">return</span> <span class="n">server_config</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs all the necessary attributes for the WebServer object.&quot;&quot;&quot;</span>
+        <span class="n">InputWebserver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">NiceSprinklerWebServer</span><span class="o">.</span><span class="n">get_config</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">configure_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Configure the run based on command line arguments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">examples_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_path</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;root_path&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">root_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root_path</span> <span class="o">=</span> <span class="n">examples_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stl_path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">stl</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">stl</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">stl</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create SprinklerSystem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="n">SprinklerSystem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stl_path</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">examples_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;../nicesprinkler_examples&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerWebServer.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Constructs all the necessary attributes for the WebServer object.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs all the necessary attributes for the WebServer object.&quot;&quot;&quot;</span>
+    <span class="n">InputWebserver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">NiceSprinklerWebServer</span><span class="o">.</span><span class="n">get_config</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sprinkler.webserver.NiceSprinklerWebServer.configure_run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">configure_run</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Configure the run based on command line arguments</p>
+
+            <details class="quote">
+              <summary>Source code in <code>sprinkler/webserver.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">configure_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configure the run based on command line arguments</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">examples_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">examples_path</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;root_path&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">root_path</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_path</span> <span class="o">=</span> <span class="n">examples_path</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">config_path</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stl_path</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">stl</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">stl</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">stl</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create SprinklerSystem</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sprinkler_system</span> <span class="o">=</span> <span class="n">SprinklerSystem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stl_path</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+    
+  </body>
+</html>
