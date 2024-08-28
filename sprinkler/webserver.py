@@ -7,7 +7,7 @@ import os
 
 from ngwidgets.input_webserver import InputWebserver, InputWebSolution
 from ngwidgets.webserver import WebserverConfig
-from nicegui import Client, ui
+from nicegui import app,Client, ui
 
 from sprinkler.version import Version
 from sprinkler.sprinkler_core import SprinklerSystem, SprinklerConfig
@@ -34,6 +34,7 @@ class NiceSprinklerWebServer(InputWebserver):
         InputWebserver.__init__(self, config=NiceSprinklerWebServer.get_config())
         self.sprinkler_system = None
 
+
     def configure_run(self):
         """
         Configure the run based on command line arguments
@@ -56,6 +57,10 @@ class NiceSprinklerWebServer(InputWebserver):
 
         # Create SprinklerSystem
         self.sprinkler_system = SprinklerSystem(self.config_path, self.stl_path)
+        stl_directory = os.path.dirname(self.stl_path)
+
+        # Add the static files route for serving the STL files
+        app.add_static_files("/examples", stl_directory)
 
     @classmethod
     def examples_path(cls) -> str:
