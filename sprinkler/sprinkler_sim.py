@@ -40,13 +40,26 @@ class SprinklerSimulation:
     def add_sprinkler(self):
         # Add a simplified sprinkler representation
         sprinkler_pos = self.sprinkler_system.config.sprinkler_position
-        with self.scene.group().move(x=sprinkler_pos.x, y=0, z=sprinkler_pos.z):  # Moved to front (y=0)
-            self.scene.cylinder(0.1, 0.1, 0.5).material('#4B0082')  # Indigo, for contrast
-            self.sprinkler_head = self.scene.sphere(0.05).material('#4682B4').move(z=0.5)  # Steel blue sphere for sprinkler head
+        sprinkler_height = sprinkler_pos.z  # Use the full height from the config
+
+        # Position the sprinkler correctly based on the config
+        with self.scene.group().move(x=sprinkler_pos.x, y=sprinkler_pos.y, z=0):
+            # Cylinder for the full height of the sprinkler
+            self.scene.cylinder(0.1, 0.1, sprinkler_height).material('#4B0082')  # Indigo, for contrast
+
+            # Sprinkler head at the top of the cylinder
+            self.sprinkler_head = self.scene.sphere(0.05).material('#4682B4').move(z=sprinkler_height)
+
+    def add_debug_markers(self):
+        # Origin marker (red)
+        self.scene.sphere(0.1).material('#FF0000').move(0, 0, 0)
+        # Sprinkler position marker (blue)
+        sprinkler_pos = self.sprinkler_system.config.sprinkler_position
+        self.scene.sphere(0.1).material('#0000FF').move(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z)
 
     def move_camera(self):
         self.scene.move_camera(
-            x=self.cx, y=-self.cy, z=self.cy,
+            x=self.cx, y=-self.lawn_length, z=self.lawn_length/2,  # Moved back and lowered
             look_at_x=self.cx, look_at_y=self.cy, look_at_z=0
         )
 
@@ -59,9 +72,11 @@ class SprinklerSimulation:
             background_color='#87CEEB'  # Sky blue
         ).classes('w-full h-[700px]')
 
+
         self.add_garden3d()
         self.add_lawn()
         self.add_sprinkler()
+        self.add_debug_markers()
 
         self.move_camera()
 
