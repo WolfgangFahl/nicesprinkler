@@ -1,8 +1,9 @@
-'''
+"""
 Created on 13.08.2024
 
 @author: wf
-'''
+"""
+
 """
 stepper.py
 
@@ -12,13 +13,22 @@ Author: Wolfgang, ChatGPT, Claude AI
 Date: 2024-07 to 2024-08
 """
 
-import RPi.GPIO as GPIO
-import time
 import argparse
+import time
 from typing import Dict
 
+import RPi.GPIO as GPIO
+
+
 class StepperMotor:
-    def __init__(self, name: str, ena_pin: int, dir_pin: int, pul_pin: int, steps_per_revolution: int = 200):
+    def __init__(
+        self,
+        name: str,
+        ena_pin: int,
+        dir_pin: int,
+        pul_pin: int,
+        steps_per_revolution: int = 200,
+    ):
         self.name = name
         self.ena_pin = ena_pin
         self.dir_pin = dir_pin
@@ -48,12 +58,13 @@ class StepperMotor:
             GPIO.output(self.pul_pin, GPIO.LOW)
             time.sleep(delay)
 
+
 class Move:
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
         self.motors: Dict[int, StepperMotor] = {
             1: StepperMotor("Motor1", 37, 35, 33),
-            2: StepperMotor("Motor2", 31, 29, 23)
+            2: StepperMotor("Motor2", 31, 29, 23),
         }
 
     def enable_motor(self, motor_id: int):
@@ -70,7 +81,9 @@ class Move:
         else:
             print(f"Motor {motor_id} not found")
 
-    def move_motor(self, motor_id: int, angle: float, speed_rpm: float, keep_enabled: bool = False):
+    def move_motor(
+        self, motor_id: int, angle: float, speed_rpm: float, keep_enabled: bool = False
+    ):
         motor = self.motors.get(motor_id)
         if not motor:
             print(f"Motor {motor_id} not found")
@@ -83,11 +96,13 @@ class Move:
         if not keep_enabled:
             motor.disable()
 
-    def perform_pattern(self,
+    def perform_pattern(
+        self,
         horizontal_angle: float,
         horizontal_steps: int,
         vertical_angle: float,
-        rpm: float):
+        rpm: float,
+    ):
         # Enable both motors before starting the pattern
         self.enable_motor(1)
         self.enable_motor(2)
@@ -106,25 +121,20 @@ class Move:
 
     def perform_pattern_by_args(self, pattern_args):
         # Default values
-        params = {
-            'steps': 80,
-            'hangle': 160,
-            'vangle': 120,
-            'rpm': 10
-        }
+        params = {"steps": 80, "hangle": 160, "vangle": 120, "rpm": 10}
 
         # Parse provided arguments
         for arg in pattern_args:
-            key, value = arg.split('=')
+            key, value = arg.split("=")
             if key in params:
                 params[key] = float(value)
 
         # Execute the pattern
         self.perform_pattern(
-            horizontal_angle=params['hangle'] / params['steps'],
-            horizontal_steps=int(params['steps']),
-            vertical_angle=params['vangle'],
-            rpm=params['rpm']
+            horizontal_angle=params["hangle"] / params["steps"],
+            horizontal_steps=int(params["steps"]),
+            vertical_angle=params["vangle"],
+            rpm=params["rpm"],
         )
 
     def cleanup(self):
@@ -133,15 +143,36 @@ class Move:
         GPIO.cleanup()
         time.sleep(0.1)
 
+
 # Modify main function to use the new approach
 def main():
     parser = argparse.ArgumentParser(description="Control stepper motors")
-    parser.add_argument("-m", "--motor", type=int, default=1, help="Motor ID (default: 1)")
-    parser.add_argument("-a", "--angle", type=float, default=15, help="Angle to rotate (default: 15, positive for CW, negative for CCW)")
-    parser.add_argument("-r", "--rpm", type=float, default=20, help="Speed in RPM (default: 20)")
-    parser.add_argument("-k", "--keep-enabled", action="store_true", help="Keep motor enabled after movement")
-    parser.add_argument("-p", "--pattern", nargs='*', metavar="KEY=VALUE",
-                        help="Perform pattern: [steps=N] [hangle=DEG] [vangle=DEG] [rpm=RPM] default: steps=20,hangle=160,vangle=90,rpm=10")
+    parser.add_argument(
+        "-m", "--motor", type=int, default=1, help="Motor ID (default: 1)"
+    )
+    parser.add_argument(
+        "-a",
+        "--angle",
+        type=float,
+        default=15,
+        help="Angle to rotate (default: 15, positive for CW, negative for CCW)",
+    )
+    parser.add_argument(
+        "-r", "--rpm", type=float, default=20, help="Speed in RPM (default: 20)"
+    )
+    parser.add_argument(
+        "-k",
+        "--keep-enabled",
+        action="store_true",
+        help="Keep motor enabled after movement",
+    )
+    parser.add_argument(
+        "-p",
+        "--pattern",
+        nargs="*",
+        metavar="KEY=VALUE",
+        help="Perform pattern: [steps=N] [hangle=DEG] [vangle=DEG] [rpm=RPM] default: steps=20,hangle=160,vangle=90,rpm=10",
+    )
 
     args = parser.parse_args()
     move_controller = Move()
@@ -154,6 +185,7 @@ def main():
         move_controller.move_motor(args.motor, args.angle, args.rpm, args.keep_enabled)
 
     move_controller.cleanup()
+
 
 if __name__ == "__main__":
     main()

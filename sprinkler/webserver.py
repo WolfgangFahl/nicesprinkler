@@ -1,17 +1,19 @@
-'''
+"""
 Created on 13.08.2024
 
 @author: wf
-'''
+"""
+
 import os
 
 from ngwidgets.input_webserver import InputWebserver, InputWebSolution
 from ngwidgets.webserver import WebserverConfig
-from nicegui import app,Client, ui
+from nicegui import Client, app, ui
 
-from sprinkler.version import Version
-from sprinkler.sprinkler_core import SprinklerSystem, SprinklerConfig
+from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 from sprinkler.sprinkler_sim import SprinklerSimulation
+from sprinkler.version import Version
+
 
 class NiceSprinklerWebServer(InputWebserver):
     """WebServer class that manages the server and handles Sprinkler operations."""
@@ -33,7 +35,6 @@ class NiceSprinklerWebServer(InputWebserver):
         """Constructs all the necessary attributes for the WebServer object."""
         InputWebserver.__init__(self, config=NiceSprinklerWebServer.get_config())
         self.sprinkler_system = None
-
 
     def configure_run(self):
         """
@@ -68,6 +69,7 @@ class NiceSprinklerWebServer(InputWebserver):
         path = os.path.abspath(path)
         return path
 
+
 class NiceSprinklerSolution(InputWebSolution):
     """
     the NiceSprinkler solution
@@ -91,8 +93,10 @@ class NiceSprinklerSolution(InputWebSolution):
             self.simulation = SprinklerSimulation(self.webserver.sprinkler_system)
             self.simulation.setup_scene()
             with ui.row():
-                ui.button('Start Simulation', on_click=self.simulation.simulate_sprinkler)
-                ui.button('Reset', on_click=self.reset_simulation)
+                ui.button(
+                    "Start Simulation", on_click=self.simulation.simulate_sprinkler
+                )
+                ui.button("Reset", on_click=self.reset_simulation)
 
         await self.setup_footer()
 
@@ -100,12 +104,14 @@ class NiceSprinklerSolution(InputWebSolution):
         """Resets the simulation to its initial state."""
         self.simulation.scene.clear()
         self.simulation.setup_scene()
-        ui.notify('Simulation reset')
+        ui.notify("Simulation reset")
 
     def configure_settings(self):
         """Generates the settings page with options to modify sprinkler configuration."""
         config_str = self.webserver.sprinkler_system.config.to_yaml()
-        ui.textarea("Configuration", value=config_str).classes("w-full").on('change', self.update_config)
+        ui.textarea("Configuration", value=config_str).classes("w-full").on(
+            "change", self.update_config
+        )
 
     def update_config(self, e):
         """Updates the simulation configuration based on user input."""
@@ -114,6 +120,6 @@ class NiceSprinklerSolution(InputWebSolution):
             self.webserver.sprinkler_system.config = new_config
             self.simulation.sprinkler_system = self.webserver.sprinkler_system
             self.reset_simulation()
-            ui.notify('Configuration updated successfully')
+            ui.notify("Configuration updated successfully")
         except Exception as ex:
-            ui.notify(f'Error updating configuration: {str(ex)}', color='red')
+            ui.notify(f"Error updating configuration: {str(ex)}", color="red")
