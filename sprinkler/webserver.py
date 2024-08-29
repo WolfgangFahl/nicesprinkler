@@ -62,6 +62,7 @@ class NiceSprinklerWebServer(InputWebserver):
 
         # Add the static files route for serving the STL files
         app.add_static_files("/examples", stl_directory)
+        pass
 
     @classmethod
     def examples_path(cls) -> str:

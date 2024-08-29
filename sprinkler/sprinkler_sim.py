@@ -11,7 +11,6 @@ from ngwidgets.scene_frame import SceneFrame
 from nicegui import ui
 
 from sprinkler.sprinkler_core import SprinklerSystem
-import sprinkler
 
 
 class SprinklerSimulation:
@@ -39,6 +38,7 @@ class SprinklerSimulation:
         self.scene = None
         self.sprinkler_head = None
         self.sprinkler_model = None
+        self.init_control_values()
 
     def add_lawn(self):
         """
@@ -108,7 +108,7 @@ class SprinklerSimulation:
         """
         self.scene.move_camera(
             x=self.cx,
-            y=-self.lawn_length,
+            y=-self.lawn_length*0.4,
             z=self.lawn_length / 2,  # Moved back and lowered
             look_at_x=self.cx,
             look_at_y=self.cy,
@@ -116,34 +116,102 @@ class SprinklerSimulation:
         )
 
     def setup_scene_frame(self):
-        self.scene_frame = SceneFrame(self.solution, stl_color="#41684A")  # Bush green)
-        self.setup_buttons()
-        self.setup_scene()
+        with ui.column():
+            with ui.splitter(value=60) as self.splitter:
+                self.scene_frame = SceneFrame(self.solution, stl_color="#41684A")
+                with self.splitter.after:
+                    with ui.column():
+                        self.setup_buttons()
+                        self.setup_controls()
+                with self.splitter.before:
+                    self.setup_scene()
+
 
     def setup_scene(self):
         """
         Setup the scene
         """
-
-        with ui.scene(
+        scene=ui.scene(
             width=1700, height=700, grid=True, background_color="#87CEEB"  # Sky blue
-        ).classes("w-full h-[700px]") as scene:
-            self.scene = scene
-            self.scene_frame.scene = scene
+        ).classes("w-full h-[700px]")
+        self.scene=scene
+        self.scene_frame.scene=scene
 
-        #self.add_garden3d()
+        self.add_garden3d()
         self.add_lawn()
         self.add_sprinkler()
         self.add_debug_markers()
 
         self.move_camera()
 
+
+    def init_control_values(self):
+        self.water_particles = []
+        self.h_angle_min = 0
+        self.h_angle_max = 180
+        self.v_angle_min = 0
+        self.v_angle_max = 90
+        self.h_angle = 90  # Default value within min-max range
+        self.v_angle = 45  # Default value within min-max range
+        self.water_pressure = 0.5
+        self.simulation_speed = 1
+        self.is_dynamic = False
+
+    def add_simple_slider(self, min: float, max: float, value: float, bind_prop: str, width: str):
+        """
+        Adds a single slider to the UI.
+        """
+        return (
+            ui.slider(min=min, max=max, value=value)
+            .props("label-always")
+            .bind_value(self, bind_prop)
+            .classes(width)
+        )
+
+    def add_slider(self, min: float, max: float, value: float or tuple, label: str, bind_prop: str, width: str = "w-32", minmax: bool = False):
+        """
+        Adds a slider or a pair of min-max sliders to the UI.
+
+        Args:
+            min (float): Minimum value of the slider(s).
+            max (float): Maximum value of the slider(s).
+            value (float or tuple): Initial value of the slider (for single slider) or a tuple (min_value, max_value) for min-max sliders.
+            label (str): The label for the slider(s).
+            bind_prop (str): The property to bind the slider(s) value(s) to.
+            width (str, optional): The CSS class for the slider's width. Defaults to "w-32".
+            minmax (bool, optional): Whether to create a pair of min-max sliders. Defaults to False.
+        """
+        with ui.row() as _slider_row:
+            ui.label(f"{label}:")
+            if minmax:
+                min_value,max_value=value
+                min_slider = self.add_simple_slider(min, max, min_value, f"{bind_prop}_min", width)
+                max_slider = self.add_simple_slider(min, max, max_value, f"{bind_prop}_max", width)
+                return min_slider, max_slider
+            else:
+                return self.add_simple_slider(min, max, value, bind_prop, width)
+
+    def setup_controls(self):
+        with self.scene_frame.button_row:
+            with ui.card() as self.controls_card:
+                # Min-max sliders for horizontal and vertical angles
+                self.add_slider(min=0, max=180, value=(self.h_angle_min, self.h_angle_max), label="Horizontal Angle °", bind_prop="h_angle", minmax=True)
+                self.add_slider(min=0, max=90, value=(self.v_angle_min, self.v_angle_max), label="Vertical Angle °", bind_prop="v_angle", minmax=True)
+
+                # Single sliders for water pressure and simulation speed
+                self.add_slider(min=0.1, max=1.5, value=self.water_pressure, label="Water Pressure (bar)", bind_prop="water_pressure")
+                self.add_slider(min=0.1, max=10, value=self.simulation_speed, label="Simulation Speed (x)", bind_prop="simulation_speed")
+
+                # Toggle switch for dynamic simulation
+                ui.switch("Dynamic Simulation").bind_value(self, "is_dynamic")
+
+
     def setup_buttons(self):
         """
         add more buttons
         """
         self.scene_frame.setup_button_row()
-        with self.scene_frame.button_row:
+        with ui.row() as self.simulation_button_row:
             ui.button("Start Simulation", on_click=self.simulate_sprinkler)
             ui.button("Reset", on_click=self.reset_simulation)
 
