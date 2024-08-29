@@ -90,21 +90,10 @@ class NiceSprinklerSolution(InputWebSolution):
         """Generates the home page with a 3D viewer and controls for the sprinkler."""
         self.setup_menu()
         with ui.column():
-            self.simulation = SprinklerSimulation(self.webserver.sprinkler_system)
-            self.simulation.setup_scene()
-            with ui.row():
-                ui.button(
-                    "Start Simulation", on_click=self.simulation.simulate_sprinkler
-                )
-                ui.button("Reset", on_click=self.reset_simulation)
+            self.simulation = SprinklerSimulation(self, self.webserver.sprinkler_system)
+            self.simulation.setup_scene_frame()
 
         await self.setup_footer()
-
-    async def reset_simulation(self):
-        """Resets the simulation to its initial state."""
-        self.simulation.scene.clear()
-        self.simulation.setup_scene()
-        ui.notify("Simulation reset")
 
     def configure_settings(self):
         """Generates the settings page with options to modify sprinkler configuration."""
