@@ -44,6 +44,18 @@ class JetSpline:
     control2: Point3D
     end: Point3D
 
+    def evaluate_spline(self, t):
+        """Evaluate the Bezier spline at the given parameter values."""
+        points = []
+        spline=self
+        for ti in t:
+            p = (1-ti)**3 * spline.start + \
+                3*(1-ti)**2*ti * spline.control1 + \
+                3*(1-ti)*ti**2 * spline.control2 + \
+                ti**3 * spline.end
+            points.append((p.x, p.y, p.z))
+        return points
+
 class WaterJet:
     def __init__(self, jet_params: JetParams):
         self.jet_params = jet_params
