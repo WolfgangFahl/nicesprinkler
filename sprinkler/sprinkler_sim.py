@@ -9,7 +9,7 @@ import os
 
 from ngwidgets.scene_frame import SceneFrame
 from nicegui import ui
-
+import numpy as np
 from sprinkler.sprinkler_core import SprinklerSystem
 
 
@@ -123,7 +123,7 @@ class SprinklerSimulation:
                     with ui.column():
                         self.setup_buttons()
                         self.setup_controls()
-                with self.splitter.before:
+                with self.splitter.before as self.scene_parent:
                     self.setup_scene()
 
 
@@ -132,8 +132,8 @@ class SprinklerSimulation:
         Setup the scene
         """
         scene=ui.scene(
-            width=1700, height=700, grid=True, background_color="#87CEEB"  # Sky blue
-        ).classes("w-full h-[700px]")
+                width=1700, height=700, grid=True, background_color="#87CEEB"  # Sky blue
+            ).classes("w-full h-[700px]")
         self.scene=scene
         self.scene_frame.scene=scene
 
@@ -215,31 +215,76 @@ class SprinklerSimulation:
             ui.button("Start Simulation", on_click=self.simulate_sprinkler)
             ui.button("Reset", on_click=self.reset_simulation)
 
-    async def reset_simulation(self):
-        """Resets the simulation to its initial state."""
-        self.scene.clear()
-        self.setup_scene()
-        ui.notify("Simulation reset")
+    def reset_simulation(self):
+        try:
+            if self.scene:
+                self.scene_parent.delete(self.scene)
+            with self.scene_parent:
+                self.setup_scene()
+            self.water_particles.clear()
+        except Exception as ex:
+            self.solution.handle_exception(ex)
+
 
     def simulate_sprinkler(self):
-        spray_points = self.sprinkler_system.calculate_spray_points()
+        if self.is_dynamic:
+            self.simulate_dynamic()
+        else:
+            self.simulate_static()
 
-        for h_angle, v_angle, distance in spray_points:
-            # Move sprinkler head
-            self.sprinkler_head.move(z=0.5)  # Reset to original position
-            self.sprinkler_head.rotate(h_angle, 0, v_angle)
+    def simulate_static(self,angle_step:int=5):
+        for h_angle in range(self.h_angle_min, self.h_angle_max + 1, angle_step):
+            for v_angle in range(self.v_angle_min, self.v_angle_max + 1, angle_step):
+                self.create_water_trajectory(h_angle, v_angle)
 
-            # Show water spray
-            sprinkler_pos = self.sprinkler_system.config.sprinkler_position
-            end_x = sprinkler_pos.x + distance * math.cos(math.radians(h_angle))
-            end_y = sprinkler_pos.y + distance * math.sin(math.radians(h_angle))
-            end_z = sprinkler_pos.z + distance * math.tan(math.radians(v_angle))
+    def simulate_dynamic(self):
+        self.current_h_angle = self.h_angle_min
+        self.current_v_angle = self.v_angle_min
+        self.h_direction = 1
+        self.v_direction = 1
 
-            self.scene.line(
-                [sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z + 0.5],
-                [end_x, end_y, end_z],
-            ).material(
-                "#1E90FF", opacity=0.5
-            )  # Light blue, semi-transparent
+        def update_sprinkler():
+            self.sprinkler_head.reset_rotation()
+            self.sprinkler_head.rotate(self.current_h_angle, 0, self.current_v_angle)
+            self.create_water_trajectory(self.current_h_angle, self.current_v_angle)
+            self.remove_old_particles()
 
-            ui.timer(0.1, lambda: None)  # Small delay to visualize movement
+            # Update horizontal angle
+            self.current_h_angle += self.h_direction * self.simulation_speed
+            if self.current_h_angle >= self.h_angle_max or self.current_h_angle <= self.h_angle_min:
+                self.h_direction *= -1  # Reverse direction
+
+            # Update vertical angle
+            self.current_v_angle += self.v_direction * (self.simulation_speed / 2)
+            if self.current_v_angle >= self.v_angle_max or self.current_v_angle <= self.v_angle_min:
+                self.v_direction *= -1  # Reverse direction
+
+        # Use ui.timer for continuous updates
+        self.update_timer = ui.timer(0.05, update_sprinkler)
+
+    def create_water_trajectory(self, h_angle, v_angle):
+        sprinkler_pos = self.sprinkler_system.config.sprinkler_position
+        gravity = 9.8
+        initial_velocity = self.water_pressure * 20  # Increased factor for more visible effect
+
+        for t in np.arange(0, 3, 0.1):
+            x = sprinkler_pos.x + initial_velocity * t * math.cos(math.radians(v_angle)) * math.cos(math.radians(h_angle))
+            y = sprinkler_pos.y + initial_velocity * t * math.cos(math.radians(v_angle)) * math.sin(math.radians(h_angle))
+            z = sprinkler_pos.z + initial_velocity * t * math.sin(math.radians(v_angle)) - 0.5 * gravity * t**2
+
+            if z > 0:
+                particle = self.scene.sphere(0.02).material("#1E90FF", opacity=0.5).move(x, y, z)
+                self.water_particles.append(particle)
+
+    def remove_old_particles(self):
+        max_particles = 500  # Increased for a longer trail
+        if len(self.water_particles) > max_particles:
+            particles_to_remove = len(self.water_particles) - max_particles
+            for _ in range(particles_to_remove):
+                old_particle = self.water_particles.pop(0)
+                self.scene.remove(old_particle)
+
+    # Add this method to stop the simulation
+    def stop_simulation(self):
+        if hasattr(self, 'update_timer'):
+            self.update_timer.cancel()
