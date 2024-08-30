@@ -47,11 +47,24 @@ usage() {
   echo "Usage: $0 [OPTIONS]"
   echo "Options:"
   echo "  -h, --help         Show this help message"
+  echo "  -a, --activate     Activate the virtual environment"
   echo "  -d, --debug        Enable debug output (set -x)"
   echo "  -i, --install      Install the project in a virtual environment"
   echo "  -s, --start        Start the sprinkler system"
   echo "  --version          Show version information"
   exit 1
+}
+
+# Function to activate the virtual environment
+activate_venv() {
+  # Check if the virtual environment exists
+  if [ ! -d "$VENV_NAME" ]; then
+    error "Virtual environment '$VENV_NAME' does not exist. Please run the install option first."
+  fi
+
+  color_msg $blue "Activating virtual environment..."
+  source $VENV_NAME/bin/activate
+  positive "Virtual environment activated."
 }
 
 # Function to install the project
@@ -121,6 +134,7 @@ start_sprinkler() {
 while [[ $# -gt 0 ]]; do
   case $1 in
     -h|--help) usage ;;
+    -a|--activate) activate_venv; exit 0 ;;  # This line handles the activation
     -d|--debug) set -x ;;
     -i|--install) install_project; exit 0 ;;
     -s|--start) start_sprinkler; exit 0 ;;
