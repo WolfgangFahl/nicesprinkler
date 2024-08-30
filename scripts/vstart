@@ -109,7 +109,7 @@ start_sprinkler() {
 
   # Start the sprinkler system
   color_msg $blue "Starting the sprinkler system..."
-  # Add your sprinkler start command here
+  sprinkler -s
   positive "Sprinkler system started!"
 
   # Deactivate virtual environment
