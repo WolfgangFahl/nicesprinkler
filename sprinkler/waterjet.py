@@ -1,6 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
+
 @dataclass
 class Point3D:
     x: float
@@ -19,13 +20,14 @@ class Point3D:
     def to_tuple(self):
         return (self.x, self.y, self.z)
 
+
 @dataclass
 class JetParams:
     start_position: Point3D
     horizontal_angle: float
     vertical_angle: float
     pressure: float = 0.1  # bar
-    nozzle_diameter: float = 25.4/2  # mm (default 1/2 inch)
+    nozzle_diameter: float = 25.4 / 2  # mm (default 1/2 inch)
     initial_velocity: float = field(init=False)
 
     def __post_init__(self):
@@ -37,6 +39,7 @@ class JetParams:
         flow_rate = velocity * flow_area  # m^3/s
         self.initial_velocity = flow_rate / flow_area  # m/s
 
+
 @dataclass
 class JetSpline:
     start: Point3D
@@ -47,14 +50,17 @@ class JetSpline:
     def evaluate_spline(self, t):
         """Evaluate the Bezier spline at the given parameter values."""
         points = []
-        spline=self
+        spline = self
         for ti in t:
-            p = (1-ti)**3 * spline.start + \
-                3*(1-ti)**2*ti * spline.control1 + \
-                3*(1-ti)*ti**2 * spline.control2 + \
-                ti**3 * spline.end
+            p = (
+                (1 - ti) ** 3 * spline.start
+                + 3 * (1 - ti) ** 2 * ti * spline.control1
+                + 3 * (1 - ti) * ti**2 * spline.control2
+                + ti**3 * spline.end
+            )
             points.append((p.x, p.y, p.z))
         return points
+
 
 class WaterJet:
     def __init__(self, jet_params: JetParams):
@@ -62,8 +68,19 @@ class WaterJet:
         self.gravity = 9.8
 
     @classmethod
-    def from_position(cls, x: float, y: float, z: float, h_angle: float, v_angle: float, pressure: float, nozzle_diameter: float = 25.4/2):
-        return cls(JetParams(Point3D(x, y, z), h_angle, v_angle, pressure, nozzle_diameter))
+    def from_position(
+        cls,
+        x: float,
+        y: float,
+        z: float,
+        h_angle: float,
+        v_angle: float,
+        pressure: float,
+        nozzle_diameter: float = 25.4 / 2,
+    ):
+        return cls(
+            JetParams(Point3D(x, y, z), h_angle, v_angle, pressure, nozzle_diameter)
+        )
 
     def _calculate_trajectory_params(self):
         jp = self.jet_params
@@ -73,12 +90,14 @@ class WaterJet:
 
         t_max = 2 * jp.initial_velocity * sin_v / self.gravity
         max_distance = jp.initial_velocity * t_max * cos_v
-        max_height = jp.start_position.z + (jp.initial_velocity * sin_v)**2 / (2 * self.gravity)
+        max_height = jp.start_position.z + (jp.initial_velocity * sin_v) ** 2 / (
+            2 * self.gravity
+        )
 
         direction = Point3D(
             math.cos(math.radians(jp.horizontal_angle)),
             math.sin(math.radians(jp.horizontal_angle)),
-            0
+            0,
         )
 
         return max_distance, max_height, direction

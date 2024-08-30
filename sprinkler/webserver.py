@@ -12,7 +12,7 @@ from nicegui import Client, app, ui
 
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 from sprinkler.sprinkler_sim import SprinklerSimulation
-from sprinkler.stepper_viiew import StepperView
+from sprinkler.stepper_view import StepperView
 from sprinkler.version import Version
 
 
@@ -39,9 +39,7 @@ class NiceSprinklerWebServer(InputWebserver):
 
         @ui.page("/remote")
         async def remote(client: Client):
-            return await self.page(
-                client,NiceSprinklerSolution.remote
-            )
+            return await self.page(client, NiceSprinklerSolution.remote)
 
     def configure_run(self):
         """
@@ -94,13 +92,11 @@ class NiceSprinklerSolution(InputWebSolution):
         super().__init__(webserver, client)
         self.simulation = None
 
-
     def configure_menu(self):
         """
         configure additional non-standard menu entries
         """
         self.link_button(name="remote", icon_name="remote", target="/remote")
-
 
     async def remote(self):
         def setup_remote():
