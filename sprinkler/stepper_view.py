@@ -21,7 +21,7 @@ class MotorView:
 
     def move(self, move_controller: Move, angle: float, rpm: float):
         if self.enabled:
-            move_controller.move_motor(self.id, angle, rpm, keep_enabled=True)
+            move_controller.move_motor(self.id, angle, rpm, keep_enabled=self.enabled)
             self.position += angle
             if self.slider:
                 self.slider.set_value(self.position)

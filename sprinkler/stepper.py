@@ -17,7 +17,34 @@ import argparse
 import time
 from typing import Dict
 
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except (ImportError, RuntimeError):
+    # Create a dummy GPIO module if the import fails (for non-Raspberry Pi environments)
+    print("RPi.GPIO module not found. Using a mock version for non-Raspberry Pi environment.")
+
+    class GPIO:
+        BOARD = None
+        OUT = None
+        HIGH = None
+        LOW = None
+
+        @staticmethod
+        def setmode(mode):
+            pass
+
+        @staticmethod
+        def setup(pin, mode):
+            pass
+
+        @staticmethod
+        def output(pin, state):
+            pass
+
+        @staticmethod
+        def cleanup():
+            pass
+
 
 
 class StepperMotor:
