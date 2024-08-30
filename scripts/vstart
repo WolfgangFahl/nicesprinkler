@@ -100,6 +100,11 @@ install_project() {
   pip install --upgrade pip
   positive "Pip upgraded."
 
+  # Install RPi.GPIO package
+	color_msg $blue "Installing RPi.GPIO..."
+	pip install RPi.GPIO
+	positive "RPi.GPIO installed."
+
   # Install the project
   color_msg $blue "Installing the project..."
   pip install .
