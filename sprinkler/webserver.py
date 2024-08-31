@@ -14,6 +14,7 @@ from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 from sprinkler.sprinkler_sim import SprinklerSimulation
 from sprinkler.stepper_view import StepperView
 from sprinkler.version import Version
+from sprinkler.sprinkler_head import SprinklerHeadView
 
 
 class NiceSprinklerWebServer(InputWebserver):
@@ -40,6 +41,9 @@ class NiceSprinklerWebServer(InputWebserver):
         @ui.page("/remote")
         async def remote(client: Client):
             return await self.page(client, NiceSprinklerSolution.remote)
+        @ui.page("/sprinkler-head")
+        async def sprinkler_head(client: Client):
+            return await self.page(client, NiceSprinklerSolution.sprinkler_head)
 
     def configure_run(self):
         """
@@ -97,6 +101,7 @@ class NiceSprinklerSolution(InputWebSolution):
         configure additional non-standard menu entries
         """
         self.link_button(name="remote", icon_name="remote", target="/remote")
+        self.link_button(name="head", icon_name="spray", target="/sprinkler-head")
 
     async def remote(self):
         def setup_remote():
@@ -104,6 +109,14 @@ class NiceSprinklerSolution(InputWebSolution):
             self.stepper_control.setup_ui()
 
         await self.setup_content_div(setup_remote)
+
+    async def sprinkler_head(self):
+        def setup_sprinkler_head():
+            self.sphv = SprinklerHeadView(self)
+            self.sphv.setup_ui()
+
+        await self.setup_content_div(setup_sprinkler_head)
+
 
     async def home(self):
         """Generates the home page with a 3D viewer and controls for the sprinkler."""
