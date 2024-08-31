@@ -112,7 +112,7 @@ class NiceSprinklerSolution(InputWebSolution):
 
     async def sprinkler_head(self):
         def setup_sprinkler_head():
-            self.sphv = SprinklerHeadView(self)
+            self.sphv = SprinklerHeadView(self,self.webserver.sprinkler_system)
             self.sphv.setup_ui()
 
         await self.setup_content_div(setup_sprinkler_head)
