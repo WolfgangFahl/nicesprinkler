@@ -24,6 +24,7 @@ class SprinklerHeadView:
         self.v_angle = 0
         self.h_motor_group = None
         self.v_motor_group = None
+        self.nema23_size=0.056
 
 
     def setup_scene(self):
@@ -35,27 +36,30 @@ class SprinklerHeadView:
         ).classes("w-full h-[700px]")
         self.scene_frame.scene = self.scene
 
-    def load_stl(self, filename, name, scale=0.001):
+    def load_stl(self, filename, name, scale=0.1,stl_color="#808080"):
         stl_url = f"/examples/{filename}"
-        return self.scene_frame.load_stl(filename, stl_url, scale=scale)
+        return self.scene_frame.load_stl(filename, stl_url, scale=scale,stl_color=stl_color)
 
     def setup_ui(self):
+        """
+        setup the user interface
+        """
         self.setup_scene()
 
         sprinkler_pos = self.sprinkler_system.config.sprinkler_position
 
         with self.scene.group().move(x=sprinkler_pos.x, y=sprinkler_pos.y, z=sprinkler_pos.z) as self.sprinkler_group:
             with self.scene.group() as self.h_motor_group:
-                self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor")
+                self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor",stl_color="#4682b4")
 
                 with self.scene.group() as self.v_motor_group:
                     self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
-                    self.motor_v.rotate(math.pi/2, 0, 0)
-                    self.motor_v.move(y=0.0528/2 + 0.0572/2, z=0.0572/2)  # Using NEMA 23 dimensions
+                    self.motor_v.rotate(math.pi/2, 0, 0) # 90 degree rotated
+                    self.motor_v.move(z=-self.nema23_size)  # Using NEMA 23 dimensions
 
                     self.hose = self.load_stl("hose.stl", "Hose Snippet")
                     self.hose.rotate(0, math.pi/2, 0)
-                    self.hose.move(x=0.0572/2 + 0.060/2, y=0.0528/2 + 0.0572/2, z=0.0572/2)
+                    self.hose.move(z=self.nema23_size)
         self.move_camera()
 
     def setup_controls(self):
