@@ -48,7 +48,6 @@ class PivotGroup:
             )
 
 
-
     def rotate(self, r: Point3D):
         # Move to origin
         self.group.move(x=-self.rp.x, y=-self.rp.y, z=-self.rp.z)
@@ -81,8 +80,11 @@ class SprinklerHeadView:
         self.hose_offset_y = -82
 
         # anchor and pivot calculation
+        # horizontal
         self.h_anchor = Point3D(0,self.nema23_size / 2,self.flange_height)
         self.h_pivot  = Point3D(0,0,self.flange_height)
+
+        # vertical
         self.v_anchor = Point3D(self.hose_offset_x,self.hose_offset_y,0)
         self.v_pivot  = Point3D(0,-self.nema23_size-20,0)
 
@@ -147,11 +149,13 @@ class SprinklerHeadView:
 
 
     def update_position(self):
+        # Apply vertical rotation
+        self.v_group.rotate(Point3D(0,self.v_angle,0))
+
         # Apply horizontal rotation
         self.h_group.rotate(Point3D(0,0,self.h_angle))
 
-        # Apply vertical rotation
-        self.v_group.rotate(Point3D(0,self.v_angle,0))
+
 
     def move_camera(self):
         self.scene.move_camera(
