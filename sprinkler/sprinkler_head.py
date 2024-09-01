@@ -82,7 +82,7 @@ class SprinklerHeadView:
 
         # anchor and pivot calculation
         self.h_anchor = Point3D(0,self.nema23_size / 2,self.flange_height)
-        self.h_pivot  = Point3D(0,0,self.flange_height-20)
+        self.h_pivot  = Point3D(0,0,self.flange_height)
         self.v_anchor = Point3D(self.hose_offset_x,self.hose_offset_y,0)
         self.v_pivot  = Point3D(0,-self.nema23_size-20,0)
 
