@@ -24,22 +24,29 @@ class PivotGroup:
         group (Group): The group of objects in the scene, initially positioned at the anchor point.
     """
     def __init__(self, scene, ap: Point3D, rp: Point3D, debug: bool = True):
-        self.ap = ap  # anchor point
-        self.rp = rp  # relative pivot point
+        self.ap = ap    # anchor point
+        self.rp = rp    # relative pivot point
+        self.pp = ap+rp # absolute pivot point
         self.scene = scene
         self.group = scene.group().move(x=ap.x, y=ap.y, z=ap.z)
         if debug:
             self.pivot_debug()
 
-    def pivot_debug(self, radius: float = 20, color: str = '#ff0000'):
+    def pivot_debug(self, radius: float = 15, ap_color:str="#00ff00", pp_color: str = '#ff0000'):
         """
         show a debug sphere
         """
-        self.sphere = (
-            self.scene.sphere(radius)
-            .move(x=self.rp.x, y=self.rp.y, z=self.rp.z)
-            .material(color)  # Red sphere for pivot
-        )
+        with self.group:
+            self.ap_sphere = (
+                self.scene.sphere(radius)
+                .material(ap_color)  # green sphere for anchor point
+            )
+        with self.scene:
+            self.pp_sphere = (
+                self.scene.sphere(radius)
+                .move(x=self.pp.x, y=self.pp.y, z=self.pp.z)
+                .material(pp_color)  # green sphere for anchor point
+            )
 
     def rotate(self, r: Point3D):
         # Move to origin
@@ -119,8 +126,8 @@ class SprinklerHeadView:
         """
         set up debug sliders
         """
-        self.h_pivot_slider = GroupPos("h_pivot", self.h_group.group, min_value=-100, max_value=100)
-        self.v_pivot_slider = GroupPos("v_pivot", self.v_group.group, min_value=-100, max_value=100)
+        self.h_pivot_slider = GroupPos("h_pivot", self.h_group.group, min_value=-150, max_value=150)
+        self.v_pivot_slider = GroupPos("v_pivot", self.v_group.group, min_value=-150, max_value=150)
 
     def setup_controls(self):
         with ui.row():
