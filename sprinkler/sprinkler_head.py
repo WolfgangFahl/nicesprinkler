@@ -26,7 +26,7 @@ class SprinklerHeadView:
         self.h_angle = 0
         self.v_angle = 0
         self.nema23_size = 56
-        self.pos_debug = False
+        self.pos_debug = True
 
         self.flange_height = 104  # Height of the flange adapter
         self.hose_offset_x = -92
@@ -56,23 +56,30 @@ class SprinklerHeadView:
         stl_url = f"/examples/{filename}"
         return self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
 
+    def add_debug_sphere(self):
+        if self.pos_debug:
+            self.scene.sphere(20).material('#ff0000')  # Red sphere for  pivot
+
+
     def setup_ui(self):
         self.setup_scene()
 
         with self.scene.group() as self.base_group:
             self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor", stl_color="#4682b4")
+            self.add_debug_sphere()
 
             with self.scene.group().move(x=self.hp_x,y=self.hp_y,z=self.hp_z) as self.h_rotation_group:
-                self.scene.sphere(2, '#ff0000')  # Red sphere for horizontal pivot
                 self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
                 self.motor_v.rotate(math.pi/2, 0, 0)
+                self.add_debug_sphere()
 
                 with self.scene.group().move(x=self.vp_x, y=self.vp_y, z=self.vp_z) as self.v_rotation_group:
-                    self.scene.sphere(2, '#ff0000')  # Red sphere for vertical pivot
                     self.hose = self.load_stl("hose.stl", "Hose Snippet")
                     self.hose.rotate(0, math.pi/2, 0)
+                    self.add_debug_sphere()
 
-        self.setup_sliders()  # Always set up sliders now
+        if self.pos_debug:
+            self.setup_sliders()  # Always set up sliders now
         self.move_camera()
 
     def setup_sliders(self):
