@@ -33,6 +33,11 @@ class SprinklerHeadView:
         self.hose_offset_x = -92
         self.hose_offset_y = -82
 
+        # Pivot and offset calculations
+        self.h_pivot_z = self.nema23_size / 2
+        self.v_pivot_y = self.nema23_size / 2
+        self.v_pivot_z = self.flange_height - self.h_pivot_z
+
     def setup_scene(self):
         self.scene_frame = SceneFrame(self.solution, stl_color="#41684A")
         self.scene_frame.setup_button_row()
@@ -54,23 +59,18 @@ class SprinklerHeadView:
         """
         self.setup_scene()
 
-        sprinkler_pos = self.sprinkler_system.config.sprinkler_position
+        with self.scene.group() as self.base_group:
+            self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor", stl_color="#4682b4")
 
-        with self.scene.group().move(x=sprinkler_pos.x, y=sprinkler_pos.y, z=sprinkler_pos.z) as self.sprinkler_group:
-            # Base group for horizontal rotation
-            with self.scene.group() as self.base_group:
-                self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor", stl_color="#4682b4")
+            with self.scene.group().move(z=self.h_pivot_z) as self.h_rotation_group:
+                with self.scene.group().move(y=self.v_pivot_y, z=self.v_pivot_z) as self.v_motor_group:
+                    self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
+                    self.motor_v.rotate(math.pi/2, 0, 0)
 
-                # Group for vertical rotation
-                with self.scene.group().move(y=self.nema23_size/2, z=self.flange_height) as self.h_rotation_group:
-                    with self.scene.group() as self.v_motor_group:
-                        self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
-                        self.motor_v.rotate(math.pi/2, 0, 0)  # 90 degree rotated
+                with self.scene.group().move(x=self.hose_offset_x, y=self.hose_offset_y) as self.v_rotation_group:
+                    self.hose = self.load_stl("hose.stl", "Hose Snippet")
+                    self.hose.rotate(0, math.pi/2, 0)
 
-                    # Hose group
-                    with self.scene.group().move(x=self.hose_offset_x, y=self.hose_offset_y) as self.v_rotation_group:
-                        self.hose = self.load_stl("hose.stl", "Hose Snippet")
-                        self.hose.rotate(0, math.pi/2, 0)
 
         if self.pos_debug:
             self.setup_sliders()
