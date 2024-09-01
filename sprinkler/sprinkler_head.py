@@ -25,11 +25,13 @@ class SprinklerHeadView:
         self.hose = None
         self.h_angle = 0
         self.v_angle = 0
-        self.h_motor_group = None
-        self.v_motor_group = None
-        self.nema23_size=56
-        self.pos_debug=False
+        self.nema23_size = 56
+        self.pos_debug = False
 
+        # Define pivot points and offsets
+        self.flange_height = 104  # Height of the flange adapter
+        self.hose_offset_x = -92
+        self.hose_offset_y = -82
 
     def setup_scene(self):
         self.scene_frame = SceneFrame(self.solution, stl_color="#41684A")
@@ -37,14 +39,14 @@ class SprinklerHeadView:
         self.setup_controls()
         self.scene = ui.scene(
             width=1700, height=700,
-            grid=(500,500),
+            grid=(500, 500),
             background_color="#87CEEB"  # Sky blue
         ).classes("w-full h-[700px]")
         self.scene_frame.scene = self.scene
 
-    def load_stl(self, filename, name, scale=1,stl_color="#808080"):
+    def load_stl(self, filename, name, scale=1, stl_color="#808080"):
         stl_url = f"/examples/{filename}"
-        return self.scene_frame.load_stl(filename, stl_url, scale=scale,stl_color=stl_color)
+        return self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
 
     def setup_ui(self):
         """
@@ -55,17 +57,21 @@ class SprinklerHeadView:
         sprinkler_pos = self.sprinkler_system.config.sprinkler_position
 
         with self.scene.group().move(x=sprinkler_pos.x, y=sprinkler_pos.y, z=sprinkler_pos.z) as self.sprinkler_group:
-            with self.scene.group() as self.h_motor_group:
-                self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor",stl_color="#4682b4")
+            # Base group for horizontal rotation
+            with self.scene.group() as self.base_group:
+                self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor", stl_color="#4682b4")
 
-                with self.scene.group() as self.v_motor_group:
-                    self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
-                    self.motor_v.rotate(math.pi/2, 0, 0) # 90 degree rotated
-                    self.v_motor_group.move(y=self.nema23_size/2,z=104)  # Using NEMA 23 dimensions
-                    with self.scene.group() as self.hose_group:
+                # Group for vertical rotation
+                with self.scene.group().move(y=self.nema23_size/2, z=self.flange_height) as self.h_rotation_group:
+                    with self.scene.group() as self.v_motor_group:
+                        self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
+                        self.motor_v.rotate(math.pi/2, 0, 0)  # 90 degree rotated
+
+                    # Hose group
+                    with self.scene.group().move(x=self.hose_offset_x, y=self.hose_offset_y) as self.v_rotation_group:
                         self.hose = self.load_stl("hose.stl", "Hose Snippet")
                         self.hose.rotate(0, math.pi/2, 0)
-                        self.hose_group.move(x=-92,y=-82)
+
         if self.pos_debug:
             self.setup_sliders()
         self.move_camera()
@@ -86,21 +92,21 @@ class SprinklerHeadView:
         self.v_angle_slider.on("change", self.update_position)
 
     def setup_sliders(self):
-        #h_pos=GroupPos("h",self.h_motor_group)
-        v_pos=GroupPos("v",self.v_motor_group,min_value=0,max_value=150)
-        hose_pos=GroupPos("hose",self.hose_group,min_value=-100,max_value=100)
+        if self.pos_debug:
+            v_pos = GroupPos("v", self.v_motor_group, min_value=0, max_value=150)
+            hose_pos = GroupPos("hose", self.hose_group, min_value=-100, max_value=100)
 
     def update_position(self):
-        self.v_motor_group.rotate(0, 0, math.radians(self.h_angle))
-        self.hose_group.rotate(0, math.radians(self.v_angle), 0)
+        # Apply horizontal rotation
+        self.h_rotation_group.rotate(0, 0, math.radians(self.h_angle))
 
+        # Apply vertical rotation
+        self.v_rotation_group.rotate(0, math.radians(self.v_angle), 0)
 
     def move_camera(self):
-        #sprinkler_pos = self.sprinkler_system.config.sprinkler_position
-
         self.scene.move_camera(
             x=0,
-            y=- 200,  # Move back a bit
+            y=-200,  # Move back a bit
             z=150,  # Slightly above the sprinkler
             look_at_x=0,
             look_at_y=0,
