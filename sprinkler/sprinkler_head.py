@@ -23,29 +23,37 @@ class PivotGroup:
         rp (Point3D): The relative pivot point around which the group will rotate.
         group (Group): The group of objects in the scene, initially positioned at the anchor point.
     """
-    def __init__(self, scene, ap: Point3D, rp: Point3D, debug: bool = True):
+    def __init__(self, scene_frame, ap: Point3D, rp: Point3D, debug_radius:float=15):
         self.ap = ap    # anchor point
         self.rp = rp    # relative pivot point
         self.pp = ap+rp # absolute pivot point
-        self.scene = scene
-        self.group = scene.group().move(x=ap.x, y=ap.y, z=ap.z)
-        if debug:
-            self.pivot_debug()
+        self.scene_frame = scene_frame
+        self.scene=scene_frame.scene
+        self.group = self.scene.group().move(x=ap.x, y=ap.y, z=ap.z)
+        if debug_radius:
+            self.pivot_debug(radius=debug_radius)
+
+    def load_stl(self, filename, name, cd:Point3D,scale=1, stl_color="#808080"):
+        stl_url = f"/examples/{filename}"
+        stl_object=self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
+        stl_object.name=name
+        stl_object.move(x=cd.x,y=cd.y,z=cd.z)
+        return stl_object
 
     def pivot_debug(self, radius: float = 15, ap_color:str="#00ff00", pp_color: str = '#ff0000'):
         """
         show a debug sphere
         """
-        self.pp_sphere = (
-                self.scene.sphere(radius)
-                #.move(x=self.rp.x, y=self.rp.y, z=self.pp.z)
-                .material(pp_color)  # green sphere for anchor point
-            )
         with self.group:
-            self.ap_sphere = (
+            self.pp_sphere = (
                 self.scene.sphere(radius)
-                .material(ap_color)  # green sphere for anchor point
+                .material(pp_color)  # red sphere for pivot point
             )
+        self.ap_sphere = (
+            self.scene.sphere(radius)
+            .move(x=self.ap.x, y=self.ap.y, z=self.ap.z)
+            .material(ap_color)  # green sphere for anchor point
+        )
 
 
     def rotate(self, r: Point3D):
@@ -80,13 +88,21 @@ class SprinklerHeadView:
         self.hose_offset_y = -82
 
         # anchor and pivot calculation
+        # base
+        self.b_anchor = Point3D(0,0,self.nema23_size / 2)
+        self.b_pivot  = Point3D(0,0,0)
+
         # horizontal
-        self.h_anchor = Point3D(0,self.nema23_size / 2,self.flange_height)
-        self.h_pivot  = Point3D(0,0,self.flange_height)
+        self.h_anchor = Point3D(0,0,self.flange_height)
+        self.h_pivot  = Point3D(-self.nema23_size/2,-self.nema23_size/2,self.flange_height)
 
         # vertical
         self.v_anchor = Point3D(self.hose_offset_x,self.hose_offset_y,0)
         self.v_pivot  = Point3D(0,-self.nema23_size-20,0)
+
+        # center delta
+        self.nema23_center_delta=Point3D(-self.nema23_size/2, -self.nema23_size/2, -self.nema23_size/2)
+        self.hose_center_delta=Point3D(0,0,0)
 
     def setup_scene(self):
         self.scene_frame = SceneFrame(self.solution, stl_color="#41684A")
@@ -99,26 +115,22 @@ class SprinklerHeadView:
         ).classes("w-full h-[700px]")
         self.scene_frame.scene = self.scene
 
-    def load_stl(self, filename, name, scale=1, stl_color="#808080"):
-        stl_url = f"/examples/{filename}"
-        stl_object=self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
-        stl_object.name=name
-        return stl_object
 
     def setup_ui(self):
         self.setup_scene()
 
-        with self.scene.group() as self.base_group:
-            self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor", stl_color="#4682b4")
+        self.b_group=PivotGroup(self.scene_frame,self.b_anchor,self.b_pivot)
+        with self.b_group.group:
+            self.motor_h = self.b_group.load_stl("nema23.stl", "Horizontal Motor",cd=self.nema23_center_delta,stl_color="#4682b4")
 
-            self.h_group=PivotGroup(self.scene,self.h_anchor,self.h_pivot)
+            self.h_group=PivotGroup(self.scene_frame,self.h_anchor,self.h_pivot)
             with self.h_group.group:
-                self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
+                self.motor_v = self.h_group.load_stl("nema23.stl", "Vertical Motor",cd=self.nema23_center_delta)
                 self.motor_v.rotate(math.pi/2, 0, 0)
 
-                self.v_group=PivotGroup(self.scene,self.v_anchor,self.v_pivot)
+                self.v_group=PivotGroup(self.scene_frame,self.v_anchor,self.v_pivot,debug_radius=10)
                 with self.v_group.group:
-                    self.hose = self.load_stl("hose.stl", "Hose Snippet")
+                    self.hose = self.v_group.load_stl("hose.stl", "Hose Snippet",cd=self.hose_center_delta)
                     self.hose.rotate(0, math.pi/2, 0)
 
         if self.pos_debug:
@@ -129,6 +141,7 @@ class SprinklerHeadView:
         """
         set up debug sliders
         """
+        self.b_pivot_slider = GroupPos("b_pivot", self.b_group.group, min_value=-150, max_value=150)
         self.h_pivot_slider = GroupPos("h_pivot", self.h_group.group, min_value=-150, max_value=150)
         self.v_pivot_slider = GroupPos("v_pivot", self.v_group.group, min_value=-150, max_value=150)
 
