@@ -36,17 +36,18 @@ class PivotGroup:
         """
         show a debug sphere
         """
+        self.pp_sphere = (
+                self.scene.sphere(radius)
+                #.move(x=self.rp.x, y=self.rp.y, z=self.pp.z)
+                .material(pp_color)  # green sphere for anchor point
+            )
         with self.group:
             self.ap_sphere = (
                 self.scene.sphere(radius)
                 .material(ap_color)  # green sphere for anchor point
             )
-        with self.scene:
-            self.pp_sphere = (
-                self.scene.sphere(radius)
-                .move(x=self.pp.x, y=self.pp.y, z=self.pp.z)
-                .material(pp_color)  # green sphere for anchor point
-            )
+
+
 
     def rotate(self, r: Point3D):
         # Move to origin
