@@ -8,6 +8,46 @@ from nicegui import ui
 from ngwidgets.scene_frame import SceneFrame
 from sprinkler.sprinkler_core import SprinklerSystem
 from sprinkler.slider import GroupPos, SimpleSlider
+from sprinkler.waterjet import Point3D
+
+class PivotGroup:
+    """
+    A class to represent a group of objects
+    in a 3D scene with a pivot point for rotation.
+
+    see https://stackoverflow.com/questions/44287255/whats-the-right-way-to-rotate-an-object-around-a-point-in-three-js
+
+    Attributes:
+        scene (Scene): The 3D scene containing the objects.
+        ap (Point3D): The anchor point where the group is initially placed.
+        rp (Point3D): The relative pivot point around which the group will rotate.
+        group (Group): The group of objects in the scene, initially positioned at the anchor point.
+    """
+    def __init__(self, scene, ap: Point3D, rp: Point3D, debug: bool = True):
+        self.ap = ap  # anchor point
+        self.rp = rp  # relative pivot point
+        self.scene = scene
+        self.group = scene.group().move(x=ap.x, y=ap.y, z=ap.z)
+        if debug:
+            self.pivot_debug()
+
+    def pivot_debug(self, radius: float = 20, color: str = '#ff0000'):
+        """
+        show a debug sphere
+        """
+        self.sphere = (
+            self.scene.sphere(radius)
+            .move(x=self.rp.x, y=self.rp.y, z=self.rp.z)
+            .material(color)  # Red sphere for pivot
+        )
+
+    def rotate(self, r: Point3D):
+        # Move to origin
+        self.group.move(x=-self.rp.x, y=-self.rp.y, z=-self.rp.z)
+        # Rotate
+        self.group.rotate(math.radians(r.x), math.radians(r.y), math.radians(r.z))
+        # Move back
+        self.group.move(x=self.rp.x, y=self.rp.y, z=self.rp.z)
 
 class SprinklerHeadView:
     """
@@ -32,14 +72,11 @@ class SprinklerHeadView:
         self.hose_offset_x = -92
         self.hose_offset_y = -82
 
-        # Pivot and offset calculations
-        self.hp_x = 0
-        self.hp_y = self.nema23_size / 2
-        self.hp_z = self.flange_height
-
-        self.vp_x = self.hose_offset_x
-        self.vp_y = self.hose_offset_y
-        self.vp_z = 0
+        # anchor and pivot calculation
+        self.h_anchor = Point3D(0,self.nema23_size / 2,self.flange_height)
+        self.h_pivot  = Point3D(0,0,self.flange_height-20)
+        self.v_anchor = Point3D(self.hose_offset_x,self.hose_offset_y,0)
+        self.v_pivot  = Point3D(0,-self.nema23_size-20,0)
 
     def setup_scene(self):
         self.scene_frame = SceneFrame(self.solution, stl_color="#41684A")
@@ -54,37 +91,36 @@ class SprinklerHeadView:
 
     def load_stl(self, filename, name, scale=1, stl_color="#808080"):
         stl_url = f"/examples/{filename}"
-        return self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
-
-    def add_debug_sphere(self):
-        if self.pos_debug:
-            self.scene.sphere(20).material('#ff0000')  # Red sphere for  pivot
-
+        stl_object=self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
+        stl_object.name=name
+        return stl_object
 
     def setup_ui(self):
         self.setup_scene()
 
         with self.scene.group() as self.base_group:
             self.motor_h = self.load_stl("nema23.stl", "Horizontal Motor", stl_color="#4682b4")
-            self.add_debug_sphere()
 
-            with self.scene.group().move(x=self.hp_x,y=self.hp_y,z=self.hp_z) as self.h_rotation_group:
+            self.h_group=PivotGroup(self.scene,self.h_anchor,self.h_pivot)
+            with self.h_group.group:
                 self.motor_v = self.load_stl("nema23.stl", "Vertical Motor")
                 self.motor_v.rotate(math.pi/2, 0, 0)
-                self.add_debug_sphere()
 
-                with self.scene.group().move(x=self.vp_x, y=self.vp_y, z=self.vp_z) as self.v_rotation_group:
+                self.v_group=PivotGroup(self.scene,self.v_anchor,self.v_pivot)
+                with self.v_group.group:
                     self.hose = self.load_stl("hose.stl", "Hose Snippet")
                     self.hose.rotate(0, math.pi/2, 0)
-                    self.add_debug_sphere()
 
         if self.pos_debug:
             self.setup_sliders()  # Always set up sliders now
         self.move_camera()
 
     def setup_sliders(self):
-        self.h_pivot_slider = GroupPos("h_pivot", self.h_rotation_group, min_value=-100, max_value=100)
-        self.v_pivot_slider = GroupPos("v_pivot", self.v_rotation_group, min_value=-100, max_value=100)
+        """
+        set up debug sliders
+        """
+        self.h_pivot_slider = GroupPos("h_pivot", self.h_group.group, min_value=-100, max_value=100)
+        self.v_pivot_slider = GroupPos("v_pivot", self.v_group.group, min_value=-100, max_value=100)
 
     def setup_controls(self):
         with ui.row():
@@ -93,7 +129,7 @@ class SprinklerHeadView:
                 target=self, bind_prop="h_angle", width="w-64"
             )
             self.v_angle_slider = SimpleSlider.add_slider(
-                min=-90, max=90, value=0, label="Vertical Angle",
+                min=-180, max=180, value=0, label="Vertical Angle",
                 target=self, bind_prop="v_angle", width="w-64"
             )
 
@@ -104,10 +140,10 @@ class SprinklerHeadView:
 
     def update_position(self):
         # Apply horizontal rotation
-        self.h_rotation_group.rotate(0, 0, math.radians(self.h_angle))
+        self.h_group.rotate(Point3D(0,0,self.h_angle))
 
         # Apply vertical rotation
-        self.v_rotation_group.rotate(0, math.radians(self.v_angle), 0)
+        self.v_group.rotate(Point3D(0,self.v_angle,0))
 
     def move_camera(self):
         self.scene.move_camera(
