@@ -32,10 +32,11 @@ class MotorView:
             self.move(move_controller, delta, rpm)
 
 class StepperView:
-    def __init__(self, solution, sprinkler_system: SprinklerSystem):
+    def __init__(self, solution, sprinkler_system: SprinklerSystem,step_size:int=2):
         self.solution = solution
         self.sprinkler_system = sprinkler_system
         self.move_controller = Move()
+        self.step_size=step_size
         self.motor_h = MotorView("Horizontal", 1)
         self.motor_v = MotorView("Vertical", 2)
 
@@ -44,10 +45,10 @@ class StepperView:
             ui.label("Stepper Motor Control").classes("text-h6")
 
             with ui.row():
-                ui.button("Left", icon='left', on_click=lambda: self.motor_h.move(self.move_controller, -10, 10))
-                ui.button("Right", icon='right', on_click=lambda: self.motor_h.move(self.move_controller, 10, 10))
-                ui.button("Up", icon='up', on_click=lambda: self.motor_v.move(self.move_controller, -10, 10))
-                ui.button("Down", icon='down', on_click=lambda: self.motor_v.move(self.move_controller, 10, 10))
+                ui.button("Left", icon='left', on_click=lambda: self.motor_h.move(self.move_controller, -self.step_size, self.step_size))
+                ui.button("Right", icon='right', on_click=lambda: self.motor_h.move(self.move_controller, -self.step_size, self.step_size))
+                ui.button("Up", icon='up', on_click=lambda: self.motor_v.move(self.move_controller, -self.step_size, self.step_size))
+                ui.button("Down", icon='down', on_click=lambda: self.motor_v.move(self.move_controller, -self.step_size, self.step_size))
                 ui.button("Reset", icon='reset', on_click=self.reset_origin)
 
             with ui.row():
