@@ -12,6 +12,7 @@ from ngwidgets.scene_frame import SceneFrame
 from nicegui import ui
 
 from sprinkler.sprinkler_core import SprinklerSystem
+from sprinkler.slider import SimpleSlider
 
 
 class SprinklerSimulation:
@@ -156,89 +157,44 @@ class SprinklerSimulation:
         self.simulation_speed = 1
         self.is_dynamic = False
 
-    def add_simple_slider(
-        self, min: float, max: float, value: float, bind_prop: str, width: str
-    ):
-        """
-        Adds a single slider to the UI.
-        """
-        return (
-            ui.slider(min=min, max=max, value=value)
-            .props("label-always")
-            .bind_value(self, bind_prop)
-            .classes(width)
-        )
-
-    def add_slider(
-        self,
-        min: float,
-        max: float,
-        value: float or tuple,
-        label: str,
-        bind_prop: str,
-        width: str = "w-32",
-        minmax: bool = False,
-    ):
-        """
-        Adds a slider or a pair of min-max sliders to the UI.
-
-        Args:
-            min (float): Minimum value of the slider(s).
-            max (float): Maximum value of the slider(s).
-            value (float or tuple): Initial value of the slider (for single slider) or a tuple (min_value, max_value) for min-max sliders.
-            label (str): The label for the slider(s).
-            bind_prop (str): The property to bind the slider(s) value(s) to.
-            width (str, optional): The CSS class for the slider's width. Defaults to "w-32".
-            minmax (bool, optional): Whether to create a pair of min-max sliders. Defaults to False.
-        """
-        with ui.row() as _slider_row:
-            ui.label(f"{label}:")
-            if minmax:
-                min_value, max_value = value
-                min_slider = self.add_simple_slider(
-                    min, max, min_value, f"{bind_prop}_min", width
-                )
-                max_slider = self.add_simple_slider(
-                    min, max, max_value, f"{bind_prop}_max", width
-                )
-                return min_slider, max_slider
-            else:
-                return self.add_simple_slider(min, max, value, bind_prop, width)
-
     def setup_controls(self):
         with self.scene_frame.button_row:
             with ui.card() as self.controls_card:
                 # Min-max sliders for horizontal and vertical angles
-                self.add_slider(
+                SimpleSlider.add_slider(
                     min=0,
                     max=180,
                     value=(self.h_angle_min, self.h_angle_max),
                     label="Horizontal Angle °",
+                    target=self,
                     bind_prop="h_angle",
                     minmax=True,
                 )
-                self.add_slider(
+                SimpleSlider.add_slider(
                     min=0,
                     max=90,
                     value=(self.v_angle_min, self.v_angle_max),
                     label="Vertical Angle °",
+                    target=self,
                     bind_prop="v_angle",
                     minmax=True,
                 )
 
                 # Single sliders for water pressure and simulation speed
-                self.add_slider(
+                SimpleSlider.add_slider(
                     min=0.1,
                     max=1.5,
                     value=self.water_pressure,
                     label="Water Pressure (bar)",
+                    target=self,
                     bind_prop="water_pressure",
                 )
-                self.add_slider(
+                SimpleSlider.add_slider(
                     min=0.1,
                     max=10,
                     value=self.simulation_speed,
                     label="Simulation Speed (x)",
+                    target=self,
                     bind_prop="simulation_speed",
                 )
 

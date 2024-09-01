@@ -100,7 +100,7 @@ class NiceSprinklerSolution(InputWebSolution):
         """
         configure additional non-standard menu entries
         """
-        self.link_button(name="remote", icon_name="play", target="/remote")
+        self.link_button(name="remote", icon_name="play_circle", target="/remote")
         self.link_button(name="head", icon_name="circle", target="/sprinkler-head")
 
     async def remote(self):
