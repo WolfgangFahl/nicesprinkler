@@ -7,7 +7,7 @@ import math
 from nicegui import ui
 from ngwidgets.scene_frame import SceneFrame
 from sprinkler.sprinkler_core import SprinklerSystem
-from sprinkler.slider import GroupPos
+from sprinkler.slider import GroupPos, SimpleSlider
 
 class SprinklerHeadView:
     """
@@ -28,6 +28,7 @@ class SprinklerHeadView:
         self.h_motor_group = None
         self.v_motor_group = None
         self.nema23_size=56
+        self.pos_debug=False
 
 
     def setup_scene(self):
@@ -35,7 +36,9 @@ class SprinklerHeadView:
         self.scene_frame.setup_button_row()
         self.setup_controls()
         self.scene = ui.scene(
-            width=1700, height=700, grid=True, background_color="#87CEEB"  # Sky blue
+            width=1700, height=700,
+            grid=(500,500),
+            background_color="#87CEEB"  # Sky blue
         ).classes("w-full h-[700px]")
         self.scene_frame.scene = self.scene
 
@@ -63,13 +66,24 @@ class SprinklerHeadView:
                         self.hose = self.load_stl("hose.stl", "Hose Snippet")
                         self.hose.rotate(0, math.pi/2, 0)
                         self.hose_group.move(x=-92,y=-82)
-        self.setup_sliders()
+        if self.pos_debug:
+            self.setup_sliders()
         self.move_camera()
 
     def setup_controls(self):
         with ui.row():
-            ui.number("Horizontal Angle", value=0, format="%.2f").bind_value(self, "h_angle").on("change", self.update_position)
-            ui.number("Vertical Angle", value=0, format="%.2f").bind_value(self, "v_angle").on("change", self.update_position)
+            self.h_angle_slider = SimpleSlider.add_slider(
+                min=-180, max=180, value=0, label="Horizontal Angle",
+                target=self, bind_prop="h_angle", width="w-64"
+            )
+            self.v_angle_slider = SimpleSlider.add_slider(
+                min=-90, max=90, value=0, label="Vertical Angle",
+                target=self, bind_prop="v_angle", width="w-64"
+            )
+
+        # Add on_change events to update the position
+        self.h_angle_slider.on("change", self.update_position)
+        self.v_angle_slider.on("change", self.update_position)
 
     def setup_sliders(self):
         #h_pos=GroupPos("h",self.h_motor_group)
@@ -77,8 +91,9 @@ class SprinklerHeadView:
         hose_pos=GroupPos("hose",self.hose_group,min_value=-100,max_value=100)
 
     def update_position(self):
-        self.h_motor_group.rotate(0, 0, math.radians(self.h_angle))
-        self.v_motor_group.rotate(0, math.radians(self.v_angle), 0)
+        self.v_motor_group.rotate(0, 0, math.radians(self.h_angle))
+        self.hose_group.rotate(0, math.radians(self.v_angle), 0)
+
 
     def move_camera(self):
         #sprinkler_pos = self.sprinkler_system.config.sprinkler_position
