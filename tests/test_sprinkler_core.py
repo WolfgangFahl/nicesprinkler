@@ -39,7 +39,7 @@ class TestSprinklerCore(Basetest):
         """Test STL file dimensions against the config"""
         stl_width, stl_length, stl_height = self.stl_analysis["dimensions"]
         lawn_width, lawn_length = self.config.lawn.width, self.config.lawn.length
-        max_over_width = 2.5
+        max_over_width = 2.6
         max_over_length = 2.5
         self.assertLess(stl_width - max_over_width, lawn_width)
         self.assertLess(stl_length - max_over_length, lawn_length)

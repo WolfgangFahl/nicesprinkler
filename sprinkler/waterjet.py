@@ -9,9 +9,15 @@ class Point3D:
     z: float
 
     def __add__(self, other):
+        # + infix: Point3D(1, 2, 3) + Point3D(4, 5, 6) -> Point3D(5, 7, 9)
         return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
+    def __mul__(self, scalar):
+        # * infix: Point3D(1, 2, 3) * 2 -> Point3D(2, 4, 6)
+        return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
+
     def __rmul__(self, scalar):
+        # * infix (right): 2 * Point3D(1, 2, 3) -> Point3D(2, 4, 6)
         return self.__mul__(scalar)
 
     def to_tuple(self):

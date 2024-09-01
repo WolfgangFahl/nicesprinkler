@@ -48,7 +48,7 @@ class NiceSprinklerCmd(WebserverCmd):
         )
         parser.add_argument(
             "--stl",
-            default="example_garden1.stl",
+            default="example_garden.stl",
             help="path to sprinkler configuration file [default: %(default)s]",
         )
         return parser
