@@ -46,9 +46,9 @@ class StepperView:
 
             with ui.row():
                 ui.button("Left", icon='left', on_click=lambda: self.motor_h.move(self.move_controller, -self.step_size, self.step_size))
-                ui.button("Right", icon='right', on_click=lambda: self.motor_h.move(self.move_controller, -self.step_size, self.step_size))
+                ui.button("Right", icon='right', on_click=lambda: self.motor_h.move(self.move_controller, self.step_size, self.step_size))
                 ui.button("Up", icon='up', on_click=lambda: self.motor_v.move(self.move_controller, -self.step_size, self.step_size))
-                ui.button("Down", icon='down', on_click=lambda: self.motor_v.move(self.move_controller, -self.step_size, self.step_size))
+                ui.button("Down", icon='down', on_click=lambda: self.motor_v.move(self.move_controller, self.step_size, self.step_size))
                 ui.button("Reset", icon='reset', on_click=self.reset_origin)
 
             with ui.row():
