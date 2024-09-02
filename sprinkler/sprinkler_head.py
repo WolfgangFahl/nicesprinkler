@@ -27,17 +27,20 @@ class PivotGroup:
         self.ap = ap    # anchor point
         self.rp = rp    # relative pivot point
         self.pp = ap+rp # absolute pivot point
+        self.debug_radius=debug_radius
         self.scene_frame = scene_frame
         self.scene=scene_frame.scene
         self.group = self.scene.group().move(x=ap.x, y=ap.y, z=ap.z)
-        if debug_radius:
-            self.pivot_debug(radius=debug_radius)
 
     def load_stl(self, filename, name, cd:Point3D,scale=1, stl_color="#808080"):
         stl_url = f"/examples/{filename}"
         stl_object=self.scene_frame.load_stl(filename, stl_url, scale=scale, stl_color=stl_color)
         stl_object.name=name
         stl_object.move(x=cd.x,y=cd.y,z=cd.z)
+        self.cd=cd
+        if self.debug_radius:
+            self.pivot_debug(radius=self.debug_radius)
+
         return stl_object
 
     def pivot_debug(self, radius: float = 15, ap_color:str="#00ff00", pp_color: str = '#ff0000'):
@@ -49,11 +52,18 @@ class PivotGroup:
                 self.scene.sphere(radius)
                 .material(pp_color)  # red sphere for pivot point
             )
+        with self.group:
+            self.cd_sphere= (
+                self.scene.sphere(radius)
+                 .move(x=self.cd.x, y=self.cd.y, z=self.cd.z)
+                .material("#0000ff")  # blue sphere for center point
+            )
         self.ap_sphere = (
             self.scene.sphere(radius)
             .move(x=self.ap.x, y=self.ap.y, z=self.ap.z)
             .material(ap_color)  # green sphere for anchor point
         )
+
 
 
     def rotate(self, r: Point3D):
@@ -94,7 +104,7 @@ class SprinklerHeadView:
 
         # horizontal
         self.h_anchor = Point3D(0,0,self.flange_height)
-        self.h_pivot  = Point3D(-self.nema23_size/2,-self.nema23_size/2,self.flange_height)
+        self.h_pivot  = Point3D(0,self.nema23_size / 2,self.flange_height)
 
         # vertical
         self.v_anchor = Point3D(self.hose_offset_x,self.hose_offset_y,0)
@@ -119,7 +129,7 @@ class SprinklerHeadView:
     def setup_ui(self):
         self.setup_scene()
 
-        self.b_group=PivotGroup(self.scene_frame,self.b_anchor,self.b_pivot)
+        self.b_group=PivotGroup(self.scene_frame,self.b_anchor,self.b_pivot,debug_radius=20)
         with self.b_group.group:
             self.motor_h = self.b_group.load_stl("nema23.stl", "Horizontal Motor",cd=self.nema23_center_delta,stl_color="#4682b4")
 
