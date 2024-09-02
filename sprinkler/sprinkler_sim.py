@@ -165,6 +165,8 @@ class SprinklerSimulation:
             self.total_water_sprinkled = 0
             self.sprinkling_time = 0
             self.update_labels()
+
+            # Remove all water lines
             for line in self.water_lines:
                 self.scene.remove(line)
             self.water_lines.clear()
@@ -243,20 +245,7 @@ class SprinklerSimulation:
             start = points[i]
             end = points[i+1]
             line = self.scene.line(start, end)
-
-            # Attempt to use LineBasicMaterial with linewidth, if supported
-            try:
-                line.material({
-                    'type': 'LineBasicMaterial',
-                    'color': '#1E90FF',
-                    'opacity': 0.7,
-                    'transparent': True,
-                    'linewidth': 2
-                })
-            except Exception:
-                # Fallback to standard material if LineBasicMaterial is not supported
-                line.material("#1E90FF", opacity=0.7)
-
+            line.material("#1E90FF", opacity=0.7)
             self.water_lines.append(line)
 
         # Calculate water sprinkled
@@ -267,7 +256,10 @@ class SprinklerSimulation:
         # Remove old lines if there are too many
         while len(self.water_lines) > 1000:
             old_line = self.water_lines.pop(0)
-            self.scene.remove(old_line)
+            try:
+                self.scene.remove(old_line)
+            except Exception as ex:
+                pass
 
     def update_water_info(self):
         coverage = min(100, (self.total_water_sprinkled / 600) * 100)  # Assuming 600l for full coverage
