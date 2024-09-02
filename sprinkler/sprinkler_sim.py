@@ -38,6 +38,9 @@ class SprinklerSimulation:
         self.total_water_sprinkled = 0  # in liters
         self.sprinkling_time = 0  # in seconds
 
+        self.time_label = None
+        self.flow_label = None
+
     def init_control_values(self):
         self.h_angle_min = 0
         self.h_angle_max = 180
@@ -101,49 +104,99 @@ class SprinklerSimulation:
     def setup_buttons(self):
         self.scene_frame.setup_button_row()
         with ui.row() as self.simulation_button_row:
-            ui.button("Start Simulation",icon="play_circle", on_click=self.simulate_sprinkler)
-            ui.button("Reset", on_click=self.reset_simulation)
-            self.flow_measurement_button = ui.button("Start Flow Measurement",icon="clock_start", on_click=self.toggle_flow_measurement)
-        self.flow_measurement_label = ui.label("Flow measurement: Not started")
+            self.simulation_button = self.solution.tool_button(
+                "toggle simulation",
+                handler=self.toggle_simulation,
+                icon="play_circle",
+                toggle_icon="stop_circle"
+            )
+            self.flow_measurement_button = self.solution.tool_button(
+                "toggle flow measurement",
+                handler=self.toggle_flow_measurement,
+                icon="clock_start",
+                toggle_icon="clock_stop"
+            )
+            ui.button("Reset", on_click=self.reset_simulation, icon="restart_alt")
+        with ui.row() as self.progress_row:
+            self.time_label = ui.label("Time: 00:00")
+            self.flow_label = ui.label("Total Flow: 0.00 L")
 
-    def reset_simulation(self):
-        try:
-            if self.scene:
-                self.scene_parent.remove(self.scene)
-            with self.scene_parent:
-                self.setup_scene()
-            self.water_lines.clear()
-            self.total_water_sprinkled = 0
-            self.sprinkling_time = 0
-            self.update_water_info()
-        except Exception as ex:
-            self.solution.handle_exception(ex)
+    def toggle_simulation(self):
+        self.solution.toggle_icon(self.simulation_button)
+        if self.has_icon_name(self.simulation_button,"stop_circle"):
+            self.start_simulation()
+        else:
+            self.stop_simulation()
 
-    def simulate_sprinkler(self):
+    def start_simulation(self):
         if self.is_dynamic:
             self.simulate_dynamic()
         else:
             self.simulate_static()
 
+    def stop_simulation(self):
+        if hasattr(self, "update_timer"):
+            self.update_timer.cancel()
+
+    def has_icon_name(self,button,icon_name):
+        result=button._props["icon"]==icon_name
+        return result
+
+    def toggle_flow_measurement(self):
+        self.solution.toggle_icon(self.flow_measurement_button)
+        if self.has_icon_name(self.flow_measurement_button.icon,"clock_stop"):
+            self.flow_measurement_start_time = self.sprinkling_time
+            self.flow_measurement_volume = 0
+        else:
+            elapsed_time = self.sprinkling_time - self.flow_measurement_start_time
+            flow_rate = (self.flow_measurement_volume / elapsed_time) * 60  # Convert to l/min
+            ui.notify(f"Flow rate: {flow_rate:.2f} l/min")
+
+    def update_labels(self):
+        minutes, seconds = divmod(int(self.sprinkling_time), 60)
+        self.time_label.set_text(f"Time: {minutes:02d}:{seconds:02d}")
+        self.flow_label.set_text(f"Total Flow: {self.total_water_sprinkled:.2f} L")
+
+    def reset_simulation(self):
+        try:
+            self.stop_simulation()
+            self.solution.toggle_icon(self.simulation_button)
+            self.solution.toggle_icon(self.flow_measurement_button)
+            self.total_water_sprinkled = 0
+            self.sprinkling_time = 0
+            self.update_labels()
+            for line in self.water_lines:
+                self.scene.remove(line)
+            self.water_lines.clear()
+        except Exception as ex:
+            self.solution.handle_exception(ex)
+
     def simulate_static(self):
         """
         static simulation
         """
-        try:
-            sprinkler_pos = self.sprinkler_system.config.sprinkler_position
-            jet_params = JetParams(
-                start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
-                horizontal_angle=self.h_angle,
-                vertical_angle=self.v_angle,
-                pressure=self.water_pressure,
-                nozzle_diameter=25.4 / 2  # default 1/2 inch
-            )
-            jet = WaterJet(jet_params)
-            spline = jet.calculate_jet()
-            self.draw_water_line(spline)
-            self.update_water_info()
-        except Exception as ex:
-            self.solution.handle_exception(ex)
+        def update_static():
+            try:
+                sprinkler_pos = self.sprinkler_system.config.sprinkler_position
+                jet_params = JetParams(
+                    start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
+                    horizontal_angle=self.h_angle,
+                    vertical_angle=self.v_angle,
+                    pressure=self.water_pressure,
+                    nozzle_diameter=25.4 / 2  # default 1/2 inch
+                )
+                jet = WaterJet(jet_params)
+                spline = jet.calculate_jet()
+                self.draw_water_line(spline)
+                self.update_water_info()
+                self.update_labels()
+
+                if self.has_icon_name(self.simulation_button.icon,"play_circle"):
+                    self.update_timer.cancel()
+            except Exception as ex:
+                self.solution.handle_exception(ex)
+
+        self.update_timer = ui.timer(0.5, update_static)
 
     def simulate_dynamic(self):
         self.current_h_angle = self.h_angle_min
@@ -151,37 +204,59 @@ class SprinklerSimulation:
         self.h_direction = 1
         self.v_direction = 1
 
-        def update_sprinkler():
-            sprinkler_pos = self.sprinkler_system.config.sprinkler_position
-            jet_params = JetParams(
-                start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
-                horizontal_angle=self.current_h_angle,
-                vertical_angle=self.current_v_angle,
-                pressure=self.water_pressure,
-                nozzle_diameter=25.4 / 2  # default 1/2 inch
-            )
-            jet = WaterJet(jet_params)
-            spline = jet.calculate_jet()
-            self.draw_water_line(spline)
-            self.update_water_info()
+        def update_dynamic():
+            try:
+                sprinkler_pos = self.sprinkler_system.config.sprinkler_position
+                jet_params = JetParams(
+                    start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
+                    horizontal_angle=self.current_h_angle,
+                    vertical_angle=self.current_v_angle,
+                    pressure=self.water_pressure,
+                    nozzle_diameter=25.4 / 2  # default 1/2 inch
+                )
+                jet = WaterJet(jet_params)
+                spline = jet.calculate_jet()
+                self.draw_water_line(spline)
+                self.update_water_info()
 
-            # Update angles
-            self.current_h_angle += self.h_direction * self.simulation_speed
-            if self.current_h_angle >= self.h_angle_max or self.current_h_angle <= self.h_angle_min:
-                self.h_direction *= -1
+                # Update angles
+                self.current_h_angle += self.h_direction * self.simulation_speed
+                if self.current_h_angle >= self.h_angle_max or self.current_h_angle <= self.h_angle_min:
+                    self.h_direction *= -1
 
-            self.current_v_angle += self.v_direction * (self.simulation_speed / 2)
-            if self.current_v_angle >= self.v_angle_max or self.current_v_angle <= self.v_angle_min:
-                self.v_direction *= -1
+                self.current_v_angle += self.v_direction * (self.simulation_speed / 2)
+                if self.current_v_angle >= self.v_angle_max or self.current_v_angle <= self.v_angle_min:
+                    self.v_direction *= -1
 
-        self.update_timer = ui.timer(0.05, update_sprinkler)
+                self.update_labels()
+
+                if self.has_icon_name(self.simulation_button.icon,"play_circle"):
+                    self.update_timer.cancel()
+            except Exception as ex:
+                self.solution.handle_exception(ex)
+
+        self.update_timer = ui.timer(0.05, update_dynamic)
 
     def draw_water_line(self, spline: JetSpline):
         points = spline.evaluate_spline(np.linspace(0, 1, 50))
         for i in range(len(points) - 1):
             start = points[i]
             end = points[i+1]
-            line = self.scene.line(start, end).material("#1E90FF", opacity=0.5)
+            line = self.scene.line(start, end)
+
+            # Attempt to use LineBasicMaterial with linewidth, if supported
+            try:
+                line.material({
+                    'type': 'LineBasicMaterial',
+                    'color': '#1E90FF',
+                    'opacity': 0.7,
+                    'transparent': True,
+                    'linewidth': 2
+                })
+            except Exception:
+                # Fallback to standard material if LineBasicMaterial is not supported
+                line.material("#1E90FF", opacity=0.7)
+
             self.water_lines.append(line)
 
         # Calculate water sprinkled
@@ -190,32 +265,13 @@ class SprinklerSimulation:
         self.sprinkling_time += time_step
 
         # Remove old lines if there are too many
-        while len(self.water_lines) > 500:
+        while len(self.water_lines) > 1000:
             old_line = self.water_lines.pop(0)
             self.scene.remove(old_line)
 
     def update_water_info(self):
         coverage = min(100, (self.total_water_sprinkled / 600) * 100)  # Assuming 600l for full coverage
         ui.notify(f"Water sprinkled: {self.total_water_sprinkled:.2f}l, Time: {self.sprinkling_time:.2f}s, Coverage: {coverage:.2f}%")
-
-    def toggle_flow_measurement(self):
-        if not hasattr(self, 'flow_measurement_active'):
-            self.flow_measurement_active = False
-            self.flow_measurement_start_time = 0
-            self.flow_measurement_volume = 0
-
-        if not self.flow_measurement_active:
-            self.flow_measurement_active = True
-            self.flow_measurement_start_time = self.sprinkling_time
-            self.flow_measurement_volume = 0
-            self.flow_measurement_button.set_text("Stop Flow Measurement")
-            self.flow_measurement_label.set_text("Flow measurement: In progress")
-        else:
-            self.flow_measurement_active = False
-            elapsed_time = self.sprinkling_time - self.flow_measurement_start_time
-            flow_rate = (self.flow_measurement_volume / elapsed_time) * 60  # Convert to l/min
-            self.flow_measurement_button.set_text("Start Flow Measurement")
-            self.flow_measurement_label.set_text(f"Flow rate: {flow_rate:.2f} l/min")
 
     def add_lawn(self):
         with self.scene.group().move(x=self.cx, y=self.cy):
@@ -243,6 +299,3 @@ class SprinklerSimulation:
             look_at_z=0,
         )
 
-    def stop_simulation(self):
-        if hasattr(self, "update_timer"):
-            self.update_timer.cancel()
