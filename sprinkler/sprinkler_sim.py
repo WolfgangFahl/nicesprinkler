@@ -178,8 +178,11 @@ class SprinklerSimulation:
 
     def draw_water_line(self, spline: JetSpline):
         points = spline.evaluate_spline(np.linspace(0, 1, 50))
-        line = self.scene.line(points).material("#1E90FF", opacity=0.5)
-        self.water_lines.append(line)
+        for i in range(len(points) - 1):
+            start = points[i]
+            end = points[i+1]
+            line = self.scene.line(start, end).material("#1E90FF", opacity=0.5)
+            self.water_lines.append(line)
 
         # Calculate water sprinkled
         time_step = 0.05  # seconds
@@ -187,7 +190,7 @@ class SprinklerSimulation:
         self.sprinkling_time += time_step
 
         # Remove old lines if there are too many
-        if len(self.water_lines) > 500:
+        while len(self.water_lines) > 500:
             old_line = self.water_lines.pop(0)
             self.scene.remove(old_line)
 
