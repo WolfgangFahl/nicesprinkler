@@ -257,8 +257,8 @@ class TestSprinklerConfig(SprinklerBasetest):
         self.assertAlmostEqual(self.config.hose.diameter, 12.7)
         self.assertAlmostEqual(self.config.hose.flow_rate, 20.0)
         self.assertAlmostEqual(self.config.hose.pressure, 0.5586)
-        self.assertAlmostEqual(self.config.hose.velocity, 11.54, 2)
-        self.assertAlmostEqual(self.config.hose.nozzle_area, 28.87, 2)
+        self.assertAlmostEqual(self.config.hose.velocity, 10.57, 2)
+        self.assertAlmostEqual(self.config.hose.nozzle_area, 31.54, 2)
         self.assertAlmostEqual(self.config.hose.max_distance, 13.6)
 
         # Assert the motors configuration

@@ -132,8 +132,8 @@ class Hose:
         self.recalculate()
 
     def recalculate(self):
-        # Calculate velocity using max distance
-        self.velocity = math.sqrt(self.max_distance * 9.8)
+        # Use max_height to calculate initial velocity
+        self.velocity = math.sqrt(2 * 9.8 * self.max_height)
 
         # Calculate nozzle area in square mm
         self.nozzle_area = (self.flow_rate / 60) / (self.velocity * 1000) * 1e6

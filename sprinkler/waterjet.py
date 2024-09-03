@@ -41,26 +41,20 @@ class Parabolic:
         """
         v_rad = math.radians(self.vertical_angle)
         h_rad = math.radians(self.horizontal_angle)
-        sin_v = math.sin(v_rad)
-        cos_v = math.cos(v_rad)
-        cos_h = math.cos(h_rad)
-        sin_h = math.sin(h_rad)
+        v0_x = self.initial_velocity * math.cos(v_rad) * math.cos(h_rad)
+        v0_y = self.initial_velocity * math.cos(v_rad) * math.sin(h_rad)
+        v0_z = self.initial_velocity * math.sin(v_rad)
 
-        t_max = 2 * self.initial_velocity * sin_v / self.gravity  # Total flight time
-        t_step = t_max / num_segments  # Time step for each segment
+        t_max = (v0_z + math.sqrt(v0_z**2 + 2*self.gravity*self.start_position.z)) / self.gravity
+        t_step = t_max / num_segments
 
         points = []
         for i in range(num_segments + 1):
             t = i * t_step
-            x = self.initial_velocity * t * cos_v * cos_h
-            y = self.initial_velocity * t * cos_v * sin_h
-            z = (
-                self.start_position.z
-                + self.initial_velocity * t * sin_v
-                - 0.5 * self.gravity * t**2
-            )
-            point = self.start_position + Point3D(x, y, z)
-            points.append(point)
+            x = self.start_position.x + v0_x * t
+            y = self.start_position.y + v0_y * t
+            z = self.start_position.z + v0_z * t - 0.5 * self.gravity * t**2
+            points.append(Point3D(x, y, max(0, z)))  # Ensure z is not negative
 
         return points
 
