@@ -11,8 +11,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from ngwidgets.basetest import Basetest
 
-from sprinkler.waterjet import WaterJet, Point3D
 from sprinkler.sprinkler_config import Hose
+from sprinkler.waterjet import Point3D, WaterJet
+
 
 class TestWaterjetVisual(Basetest):
     """
@@ -30,10 +31,7 @@ class TestWaterjetVisual(Basetest):
         """
         Test the water jet calculations
         """
-        wj = WaterJet(
-            start_position=Point3D(0, 0, 1),
-            hose=self.hose
-        )
+        wj = WaterJet(start_position=Point3D(0, 0, 1), hose=self.hose)
         wj.set_angles(horizontal_angle=45, vertical_angle=30)
         trajectory = wj.calculate_trajectory()
 
@@ -65,12 +63,13 @@ class TestWaterjetVisual(Basetest):
 
         for index, data in enumerate(test_data):
             # Calibrate the hose with max_distance and derive max_height from pressure
-            self.hose.calibrate(max_distance=data["d"], max_height=data["pressure"] * 10.2, flow_rate=self.hose.flow_rate)
-
-            wj = WaterJet(
-                start_position=Point3D(0, 0, 1),
-                hose=self.hose
+            self.hose.calibrate(
+                max_distance=data["d"],
+                max_height=data["pressure"] * 10.2,
+                flow_rate=self.hose.flow_rate,
             )
+
+            wj = WaterJet(start_position=Point3D(0, 0, 1), hose=self.hose)
             wj.set_angles(horizontal_angle=45, vertical_angle=45)
             trajectory = wj.calculate_trajectory()
 
@@ -78,19 +77,27 @@ class TestWaterjetVisual(Basetest):
             fig, ax = plt.subplots(figsize=(10, 5))
 
             # Plot expected parabolic trajectory using hose.velocity
-            t_expected = np.linspace(0, 2 * self.hose.velocity * math.sin(math.radians(45)) / 9.8, 100)
+            t_expected = np.linspace(
+                0, 2 * self.hose.velocity * math.sin(math.radians(45)) / 9.8, 100
+            )
             x_expected = self.hose.velocity * t_expected * math.cos(math.radians(45))
-            z_expected = self.hose.velocity * t_expected * math.sin(math.radians(45)) - 0.5 * 9.8 * t_expected**2 + wj.start_position.z
-            ax.plot(x_expected, z_expected, 'r--', label="Expected Parabola")
+            z_expected = (
+                self.hose.velocity * t_expected * math.sin(math.radians(45))
+                - 0.5 * 9.8 * t_expected**2
+                + wj.start_position.z
+            )
+            ax.plot(x_expected, z_expected, "r--", label="Expected Parabola")
 
             # Plot calculated trajectory
             x, y, z = zip(*[(p.x, p.y, p.z) for p in trajectory])
             ax.plot(x, z, label="Calculated Trajectory")
 
             ax.legend()
-            ax.set_xlabel('X (m)')
-            ax.set_ylabel('Z (m)')
-            ax.set_title(f'Test {index + 1}: d={data["d"]}m, pressure={data["pressure"]} bar')
+            ax.set_xlabel("X (m)")
+            ax.set_ylabel("Z (m)")
+            ax.set_title(
+                f'Test {index + 1}: d={data["d"]}m, pressure={data["pressure"]} bar'
+            )
 
             plt.savefig(os.path.join(self.output_dir, f"jet_test_{index + 1}.png"))
             plt.close(fig)
@@ -102,11 +109,27 @@ class TestWaterjetVisual(Basetest):
         max_heights = [2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0]  # meters
         vertical_angles = [15, 20, 25, 30, 35, 45, 50, 55, 60, 65, 70, 75]  # degrees
         horizontal_angles = [
-            0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180,
+            0,
+            15,
+            30,
+            45,
+            60,
+            75,
+            90,
+            105,
+            120,
+            135,
+            150,
+            165,
+            180,
         ]  # degrees
 
         for max_height in max_heights:
-            self.hose.calibrate(max_distance=self.hose.max_distance, max_height=max_height, flow_rate=self.hose.flow_rate)
+            self.hose.calibrate(
+                max_distance=self.hose.max_distance,
+                max_height=max_height,
+                flow_rate=self.hose.flow_rate,
+            )
             self._generate_height_plot(self.hose, vertical_angles, horizontal_angles)
 
     def _generate_height_plot(self, hose: Hose, vertical_angles, horizontal_angles):
@@ -115,10 +138,7 @@ class TestWaterjetVisual(Basetest):
 
         for v_angle in vertical_angles:
             for h_angle in horizontal_angles:
-                wj = WaterJet(
-                    start_position=Point3D(0, 0, 1),
-                    hose=hose
-                )
+                wj = WaterJet(start_position=Point3D(0, 0, 1), hose=hose)
                 wj.set_angles(horizontal_angle=h_angle, vertical_angle=v_angle)
                 trajectory = wj.calculate_trajectory()
 
@@ -133,7 +153,9 @@ class TestWaterjetVisual(Basetest):
         ax.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
         plt.tight_layout()
 
-        plt.savefig(os.path.join(self.output_dir, f"jet_max_height_{hose.max_height}.png"))
+        plt.savefig(
+            os.path.join(self.output_dir, f"jet_max_height_{hose.max_height}.png")
+        )
         plt.close(fig)
 
         self._print_jet_stats(hose, vertical_angles, horizontal_angles)
@@ -143,10 +165,7 @@ class TestWaterjetVisual(Basetest):
         print("-----------------------------")
         for v_angle in vertical_angles:
             for h_angle in horizontal_angles:
-                wj = WaterJet(
-                    start_position=Point3D(0, 0, 1),
-                    hose=hose
-                )
+                wj = WaterJet(start_position=Point3D(0, 0, 1), hose=hose)
                 wj.set_angles(horizontal_angle=h_angle, vertical_angle=v_angle)
                 trajectory = wj.calculate_trajectory()
 

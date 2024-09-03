@@ -1,11 +1,15 @@
-'''
+"""
 Created on 03.09.2024
 
 @author: wf
-'''
-from ngwidgets.basetest import Basetest
+"""
+
 import os
+
+from ngwidgets.basetest import Basetest
+
 from sprinkler.sprinkler_config import SprinklerConfig
+
 
 class SprinklerBasetest(Basetest):
     """

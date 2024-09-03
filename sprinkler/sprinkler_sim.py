@@ -10,14 +10,21 @@ import numpy as np
 from ngwidgets.scene_frame import SceneFrame
 from nicegui import ui
 
-from sprinkler.sprinkler_core import SprinklerSystem
 from sprinkler.slider import SimpleSlider
-from sprinkler.waterjet import WaterJet, JetParams, Point3D, JetSpline  # Import the existing WaterJet module
+from sprinkler.sprinkler_core import SprinklerSystem
+from sprinkler.waterjet import (  # Import the existing WaterJet module
+    JetParams,
+    JetSpline,
+    Point3D,
+    WaterJet,
+)
+
 
 class SprinklerSimulation:
     """
     Simulate lawn sprinkling
     """
+
     def __init__(self, solution, sprinkler_system: SprinklerSystem):
         self.solution = solution
         self.sprinkler_system = sprinkler_system
@@ -84,22 +91,36 @@ class SprinklerSimulation:
         set up controls
         """
         with self.scene_frame.button_row:
-            with ui.expansion('Controls', icon='work').classes('w-full'):
+            with ui.expansion("Controls", icon="work").classes("w-full"):
                 with ui.card() as self.controls_card:
                     SimpleSlider.add_slider(
-                        min=0, max=180, value=(self.h_angle_min, self.h_angle_max),
-                        label="Horizontal Angle °", target=self, bind_prop="h_angle", minmax=True,
+                        min=0,
+                        max=180,
+                        value=(self.h_angle_min, self.h_angle_max),
+                        label="Horizontal Angle °",
+                        target=self,
+                        bind_prop="h_angle",
+                        minmax=True,
                     )
                     SimpleSlider.add_slider(
-                        min=0, max=90, value=(self.v_angle_min, self.v_angle_max),
-                        label="Vertical Angle °", target=self, bind_prop="v_angle", minmax=True,
+                        min=0,
+                        max=90,
+                        value=(self.v_angle_min, self.v_angle_max),
+                        label="Vertical Angle °",
+                        target=self,
+                        bind_prop="v_angle",
+                        minmax=True,
                     )
                     SimpleSlider.add_slider(
-                        min=0.1, max=10, value=self.simulation_speed,
-                        label="Simulation Speed (x)", target=self, bind_prop="simulation_speed",
+                        min=0.1,
+                        max=10,
+                        value=self.simulation_speed,
+                        label="Simulation Speed (x)",
+                        target=self,
+                        bind_prop="simulation_speed",
                     )
                     ui.switch("Dynamic Simulation").bind_value(self, "is_dynamic")
-                    self.flow_number=ui.number().bind_value(self, 'flow_rate')
+                    self.flow_number = ui.number().bind_value(self, "flow_rate")
 
     def setup_buttons(self):
         self.scene_frame.setup_button_row()
@@ -108,13 +129,13 @@ class SprinklerSimulation:
                 "toggle simulation",
                 handler=self.toggle_simulation,
                 icon="play_circle",
-                toggle_icon="stop_circle"
+                toggle_icon="stop_circle",
             )
             self.flow_measurement_button = self.solution.tool_button(
                 "toggle flow measurement",
                 handler=self.toggle_flow_measurement,
                 icon="clock_start",
-                toggle_icon="clock_stop"
+                toggle_icon="clock_stop",
             )
             ui.button("Reset", on_click=self.reset_simulation, icon="restart_alt")
         with ui.row() as self.progress_row:
@@ -123,7 +144,7 @@ class SprinklerSimulation:
 
     def toggle_simulation(self):
         self.solution.toggle_icon(self.simulation_button)
-        if self.has_icon_name(self.simulation_button,"stop_circle"):
+        if self.has_icon_name(self.simulation_button, "stop_circle"):
             self.start_simulation()
         else:
             self.stop_simulation()
@@ -138,26 +159,32 @@ class SprinklerSimulation:
         if hasattr(self, "update_timer"):
             self.update_timer.cancel()
 
-    def has_icon_name(self,button,icon_name):
-        result=button._props["icon"]==icon_name
+    def has_icon_name(self, button, icon_name):
+        result = button._props["icon"] == icon_name
         return result
 
     def toggle_flow_measurement(self):
         self.solution.toggle_icon(self.flow_measurement_button)
-        if self.has_icon_name(self.flow_measurement_button.icon,"clock_stop"):
+        if self.has_icon_name(self.flow_measurement_button.icon, "clock_stop"):
             self.flow_measurement_start_time = self.sprinkling_time
             self.flow_measurement_volume = 0
         else:
             elapsed_time = self.sprinkling_time - self.flow_measurement_start_time
-            flow_rate = (self.flow_measurement_volume / elapsed_time) * 60  # Convert to l/min
+            flow_rate = (
+                self.flow_measurement_volume / elapsed_time
+            ) * 60  # Convert to l/min
             ui.notify(f"Flow rate: {flow_rate:.2f} l/min")
 
     def update_water_info(self):
         """
         update time an flow labels
         """
-        coverage = min(100, (self.total_water_sprinkled / 600) * 100)  # Assuming 600l for full coverage
-        ui.notify(f"Water sprinkled: {self.total_water_sprinkled:.2f}l, Time: {self.sprinkling_time:.2f}s, Coverage: {coverage:.2f}%")
+        coverage = min(
+            100, (self.total_water_sprinkled / 600) * 100
+        )  # Assuming 600l for full coverage
+        ui.notify(
+            f"Water sprinkled: {self.total_water_sprinkled:.2f}l, Time: {self.sprinkling_time:.2f}s, Coverage: {coverage:.2f}%"
+        )
 
         minutes, seconds = divmod(int(self.sprinkling_time), 60)
         self.time_label.set_text(f"Time: {minutes:02d}:{seconds:02d}")
@@ -183,22 +210,25 @@ class SprinklerSimulation:
         """
         static simulation
         """
+
         def update_static():
             try:
                 sprinkler_pos = self.sprinkler_system.config.sprinkler_position
                 jet_params = JetParams(
-                    start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
+                    start_position=Point3D(
+                        sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z
+                    ),
                     horizontal_angle=self.h_angle,
                     vertical_angle=self.v_angle,
                     pressure=self.water_pressure,
-                    nozzle_diameter=25.4 / 2  # default 1/2 inch
+                    nozzle_diameter=25.4 / 2,  # default 1/2 inch
                 )
                 jet = WaterJet(jet_params)
                 spline = jet.calculate_jet()
                 self.draw_water_line(spline)
                 self.update_water_info()
 
-                if self.has_icon_name(self.simulation_button.icon,"play_circle"):
+                if self.has_icon_name(self.simulation_button.icon, "play_circle"):
                     self.update_timer.cancel()
             except Exception as ex:
                 self.solution.handle_exception(ex)
@@ -218,11 +248,13 @@ class SprinklerSimulation:
             try:
                 sprinkler_pos = self.sprinkler_system.config.sprinkler_position
                 jet_params = JetParams(
-                    start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
+                    start_position=Point3D(
+                        sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z
+                    ),
                     horizontal_angle=self.current_h_angle,
                     vertical_angle=self.current_v_angle,
                     pressure=self.water_pressure,
-                    nozzle_diameter=25.4 / 2  # default 1/2 inch
+                    nozzle_diameter=25.4 / 2,  # default 1/2 inch
                 )
                 jet = WaterJet(jet_params)
                 spline = jet.calculate_jet()
@@ -231,14 +263,20 @@ class SprinklerSimulation:
 
                 # Update angles
                 self.current_h_angle += self.h_direction * self.simulation_speed
-                if self.current_h_angle >= self.h_angle_max or self.current_h_angle <= self.h_angle_min:
+                if (
+                    self.current_h_angle >= self.h_angle_max
+                    or self.current_h_angle <= self.h_angle_min
+                ):
                     self.h_direction *= -1
 
                 self.current_v_angle += self.v_direction * (self.simulation_speed / 2)
-                if self.current_v_angle >= self.v_angle_max or self.current_v_angle <= self.v_angle_min:
+                if (
+                    self.current_v_angle >= self.v_angle_max
+                    or self.current_v_angle <= self.v_angle_min
+                ):
                     self.v_direction *= -1
 
-                if self.has_icon_name(self.simulation_button.icon,"play_circle"):
+                if self.has_icon_name(self.simulation_button.icon, "play_circle"):
                     self.update_timer.cancel()
             except Exception as ex:
                 self.solution.handle_exception(ex)
@@ -250,14 +288,16 @@ class SprinklerSimulation:
         points = spline.evaluate_spline(np.linspace(0, 1, 50))
         for i in range(len(points) - 1):
             start = points[i]
-            end = points[i+1]
+            end = points[i + 1]
             line = self.scene.line(start, end)
             line.material("#1E90FF", opacity=0.7)
             self.water_lines.append(line)
 
         # Calculate water sprinkled
         time_step = 0.05  # seconds
-        self.total_water_sprinkled += (self.flow_rate / 60) * time_step  # Convert l/min to l/s
+        self.total_water_sprinkled += (
+            self.flow_rate / 60
+        ) * time_step  # Convert l/min to l/s
         self.sprinkling_time += time_step
 
         # Remove old lines if there are too many
@@ -270,7 +310,9 @@ class SprinklerSimulation:
 
     def add_lawn(self):
         with self.scene.group().move(x=self.cx, y=self.cy):
-            self.scene.box(self.lawn_width, self.lawn_length, self.lawn_height).material("#7CFC00")
+            self.scene.box(
+                self.lawn_width, self.lawn_length, self.lawn_height
+            ).material("#7CFC00")
 
     def add_garden3d(self):
         stl_filename = os.path.basename(self.sprinkler_system.stl_file_path)
@@ -281,8 +323,12 @@ class SprinklerSimulation:
         sprinkler_pos = self.sprinkler_system.config.sprinkler_position
         sprinkler_height = sprinkler_pos.z
         with self.scene.group().move(x=sprinkler_pos.x, y=sprinkler_pos.y, z=0):
-            self.scene.box(width=0.2, height=0.2, depth=sprinkler_height).material("#FF4500").move(z=sprinkler_height / 2)
-            self.sprinkler_head = self.scene.sphere(0.05).material("#4682B4").move(z=sprinkler_height)
+            self.scene.box(width=0.2, height=0.2, depth=sprinkler_height).material(
+                "#FF4500"
+            ).move(z=sprinkler_height / 2)
+            self.sprinkler_head = (
+                self.scene.sphere(0.05).material("#4682B4").move(z=sprinkler_height)
+            )
 
     def move_camera(self):
         self.scene.move_camera(
@@ -293,4 +339,3 @@ class SprinklerSimulation:
             look_at_y=self.cy,
             look_at_z=0,
         )
-

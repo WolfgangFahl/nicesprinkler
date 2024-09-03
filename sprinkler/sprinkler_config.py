@@ -1,13 +1,16 @@
-'''
+"""
 Created on 2024-09-03
 
 @author: wf
-'''
+"""
+
 import math
 from dataclasses import field
-from typing import  List
+from typing import List
+
 from ngwidgets.yamlable import lod_storable
 from tabulate import tabulate
+
 
 @lod_storable
 class Point3D:
@@ -26,6 +29,7 @@ class Point3D:
 
     def to_tuple(self):
         return (self.x, self.y, self.z)
+
 
 @lod_storable
 class Lawn:
@@ -62,6 +66,7 @@ class AngleRange:
     Defines a range of angles with a minimum, maximum, and step size and
     precaluclated angles
     """
+
     min: float
     max: float
     initial: float
@@ -83,11 +88,13 @@ class AngleRange:
             current += self.step
         return angles
 
+
 @lod_storable
 class Angles:
     """
     Angle configuration for the sprinkler
     """
+
     horizontal: AngleRange
     vertical: AngleRange
 
@@ -97,6 +104,7 @@ class Hose:
     """
     Hose specifications with calibration capabilities.
     """
+
     diameter: float = 25.4 / 2  # half inch hose, diameter in mm
     flow_rate: float = 11.5  # flow rate in l/min
     max_distance: float = 7.4  # Maximum horizontal distance reached (meters)
@@ -104,8 +112,12 @@ class Hose:
 
     pressure: float = field(init=False)  # Pressure in bar, will be calculated
     velocity: float = field(init=False)  # Velocity in m/s, will be calculated
-    nozzle_area: float = field(init=False)  # Nozzle area in square mm, will be calculated
-    nozzle_diameter: float = field(init=False)  # Nozzle diameter in mm, will be calculated
+    nozzle_area: float = field(
+        init=False
+    )  # Nozzle area in square mm, will be calculated
+    nozzle_diameter: float = field(
+        init=False
+    )  # Nozzle diameter in mm, will be calculated
 
     def __post_init__(self):
         self.recalculate()
@@ -119,18 +131,18 @@ class Hose:
         self.flow_rate = flow_rate
         self.recalculate()
 
-
     def recalculate(self):
         # Calculate velocity using max distance
         self.velocity = math.sqrt(self.max_distance * 9.8)
 
         # Calculate nozzle area in square mm
         self.nozzle_area = (self.flow_rate / 60) / (self.velocity * 1000) * 1e6
-        self.nozzle_diameter = 2 * math.sqrt(self.nozzle_area / math.pi)  # Diameter in mm
+        self.nozzle_diameter = 2 * math.sqrt(
+            self.nozzle_area / math.pi
+        )  # Diameter in mm
 
         # Calculate pressure in bar
-        self.pressure=self.max_height * 9.8 / 100
-
+        self.pressure = self.max_height * 9.8 / 100
 
     def spray_distance(self, angle: float) -> float:
         """
@@ -140,7 +152,7 @@ class Hose:
         spray_distance = self.velocity * math.cos(math.radians(angle)) * t
         return spray_distance
 
-    def specs(self, tablefmt: str = 'pipe') -> str:
+    def specs(self, tablefmt: str = "pipe") -> str:
         """
         Return the hose specifications as a formatted string using tabulate.
 
@@ -178,11 +190,13 @@ class Motor:
     min_angle: int
     max_angle: int
 
+
 @lod_storable
 class Motors:
     """
     Motor configurations
     """
+
     horizontal: Motor
     vertical: Motor
 
@@ -192,6 +206,7 @@ class SprinklerConfig:
     """
     Complete configuration for the sprinkler system
     """
+
     lawn: Lawn
     sprinkler_head: SprinklerHead
     angles: Angles

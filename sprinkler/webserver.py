@@ -11,10 +11,10 @@ from ngwidgets.webserver import WebserverConfig
 from nicegui import Client, app, ui
 
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
+from sprinkler.sprinkler_head import SprinklerHeadView
 from sprinkler.sprinkler_sim import SprinklerSimulation
 from sprinkler.stepper_view import StepperView
 from sprinkler.version import Version
-from sprinkler.sprinkler_head import SprinklerHeadView
 
 
 class NiceSprinklerWebServer(InputWebserver):
@@ -41,6 +41,7 @@ class NiceSprinklerWebServer(InputWebserver):
         @ui.page("/remote")
         async def remote(client: Client):
             return await self.page(client, NiceSprinklerSolution.remote)
+
         @ui.page("/sprinkler-head")
         async def sprinkler_head(client: Client):
             return await self.page(client, NiceSprinklerSolution.sprinkler_head)
@@ -112,11 +113,10 @@ class NiceSprinklerSolution(InputWebSolution):
 
     async def sprinkler_head(self):
         def setup_sprinkler_head():
-            self.sphv = SprinklerHeadView(self,self.webserver.sprinkler_system)
+            self.sphv = SprinklerHeadView(self, self.webserver.sprinkler_system)
             self.sphv.setup_ui()
 
         await self.setup_content_div(setup_sprinkler_head)
-
 
     async def home(self):
         """Generates the home page with a 3D viewer and controls for the sprinkler."""

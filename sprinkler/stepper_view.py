@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+
 from nicegui import ui
+
 from sprinkler.sprinkler_core import SprinklerSystem
 from sprinkler.stepper import Move
+
 
 @dataclass
 class MotorView:
@@ -31,12 +34,13 @@ class MotorView:
             delta = new_position - self.position
             self.move(move_controller, delta, rpm)
 
+
 class StepperView:
-    def __init__(self, solution, sprinkler_system: SprinklerSystem,step_size:int=2):
+    def __init__(self, solution, sprinkler_system: SprinklerSystem, step_size: int = 2):
         self.solution = solution
         self.sprinkler_system = sprinkler_system
         self.move_controller = Move()
-        self.step_size=step_size
+        self.step_size = step_size
         self.motor_h = MotorView("Horizontal", 1)
         self.motor_v = MotorView("Vertical", 2)
 
@@ -45,28 +49,70 @@ class StepperView:
             ui.label("Stepper Motor Control").classes("text-h6")
 
             with ui.row():
-                ui.button("Left", icon='left', on_click=lambda: self.motor_h.move(self.move_controller, -self.step_size, self.step_size))
-                ui.button("Right", icon='right', on_click=lambda: self.motor_h.move(self.move_controller, self.step_size, self.step_size))
-                ui.button("Up", icon='up', on_click=lambda: self.motor_v.move(self.move_controller, -self.step_size, self.step_size))
-                ui.button("Down", icon='down', on_click=lambda: self.motor_v.move(self.move_controller, self.step_size, self.step_size))
-                ui.button("Reset", icon='reset', on_click=self.reset_origin)
+                ui.button(
+                    "Left",
+                    icon="left",
+                    on_click=lambda: self.motor_h.move(
+                        self.move_controller, -self.step_size, self.step_size
+                    ),
+                )
+                ui.button(
+                    "Right",
+                    icon="right",
+                    on_click=lambda: self.motor_h.move(
+                        self.move_controller, self.step_size, self.step_size
+                    ),
+                )
+                ui.button(
+                    "Up",
+                    icon="up",
+                    on_click=lambda: self.motor_v.move(
+                        self.move_controller, -self.step_size, self.step_size
+                    ),
+                )
+                ui.button(
+                    "Down",
+                    icon="down",
+                    on_click=lambda: self.motor_v.move(
+                        self.move_controller, self.step_size, self.step_size
+                    ),
+                )
+                ui.button("Reset", icon="reset", on_click=self.reset_origin)
 
             with ui.row():
-                ui.switch("H Motor", value=self.motor_h.enabled, on_change=lambda e: self.toggle_motor(self.motor_h, e.value))
-                ui.switch("V Motor", value=self.motor_v.enabled, on_change=lambda e: self.toggle_motor(self.motor_v, e.value))
+                ui.switch(
+                    "H Motor",
+                    value=self.motor_h.enabled,
+                    on_change=lambda e: self.toggle_motor(self.motor_h, e.value),
+                )
+                ui.switch(
+                    "V Motor",
+                    value=self.motor_v.enabled,
+                    on_change=lambda e: self.toggle_motor(self.motor_v, e.value),
+                )
 
             ui.label("Horizontal Position")
             self.motor_h.slider = (
                 ui.slider(min=0, max=360, value=self.motor_h.position)
                 .props("label-always")
-                .on("change", lambda e: self.motor_h.update_position(self.move_controller, e.value, 10))
+                .on(
+                    "change",
+                    lambda e: self.motor_h.update_position(
+                        self.move_controller, e.value, 10
+                    ),
+                )
             )
 
             ui.label("Vertical Position")
             self.motor_v.slider = (
                 ui.slider(min=0, max=360, value=self.motor_v.position)
                 .props("label-always")
-                .on("change", lambda e: self.motor_v.update_position(self.move_controller, e.value, 10))
+                .on(
+                    "change",
+                    lambda e: self.motor_v.update_position(
+                        self.move_controller, e.value, 10
+                    ),
+                )
             )
 
     def toggle_motor(self, motor: MotorView, enabled: bool):

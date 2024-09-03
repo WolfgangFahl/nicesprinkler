@@ -6,9 +6,8 @@ Created on 2024-08-13
 
 import os
 
-from tests.sprinkler_base_test import SprinklerBasetest
-
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
+from tests.sprinkler_base_test import SprinklerBasetest
 
 
 class TestSprinklerCore(SprinklerBasetest):
@@ -21,7 +20,6 @@ class TestSprinklerCore(SprinklerBasetest):
         self.system = SprinklerSystem(self.config_path, self.stl_path)
         self.config = self.system.config
         self.stl_analysis = self.system.stl_analysis
-
 
     def test_stl_dimensions(self):
         """Test STL file dimensions against the config"""

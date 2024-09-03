@@ -1,14 +1,22 @@
-'''
+"""
 Created on 2024-09-01
 
 @author: wf
-'''
+"""
+
 from nicegui import ui
+
 
 class SimpleSlider:
     @classmethod
     def add_simple_slider(
-        cls, min: float, max: float, value: float, target: object, bind_prop: str, width: str
+        cls,
+        min: float,
+        max: float,
+        value: float,
+        target: object,
+        bind_prop: str,
+        width: str,
     ):
         """
         Adds a single slider to the UI.
@@ -60,20 +68,35 @@ class SimpleSlider:
             else:
                 return cls.add_simple_slider(min, max, value, target, bind_prop, width)
 
+
 class GroupPos:
     """
     sliders to control the position of a group in a scene
     """
-    def __init__(self, label: str, group, min_value: float = -100, max_value: float = 100,width:str="w-32"):
+
+    def __init__(
+        self,
+        label: str,
+        group,
+        min_value: float = -100,
+        max_value: float = 100,
+        width: str = "w-32",
+    ):
         self.group = group
         self.x = group.x
         self.y = group.y
         self.z = group.z
         with ui.row() as self.slider_row:
             self.label = ui.label(label)
-            self.x_slider = SimpleSlider.add_slider(min_value, max_value, self.x, "x", self, "x", width)
-            self.y_slider = SimpleSlider.add_slider(min_value, max_value, self.y, "y", self, "y", width)
-            self.z_slider = SimpleSlider.add_slider(min_value, max_value, self.z, "z", self, "z", width)
+            self.x_slider = SimpleSlider.add_slider(
+                min_value, max_value, self.x, "x", self, "x", width
+            )
+            self.y_slider = SimpleSlider.add_slider(
+                min_value, max_value, self.y, "y", self, "y", width
+            )
+            self.z_slider = SimpleSlider.add_slider(
+                min_value, max_value, self.z, "z", self, "z", width
+            )
 
         # Add on_change events to update the group position
         self.x_slider.on("change", self.update_group_pos)

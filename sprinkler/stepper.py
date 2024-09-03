@@ -21,7 +21,9 @@ try:
     import RPi.GPIO as GPIO
 except (ImportError, RuntimeError):
     # Create a dummy GPIO module if the import fails (for non-Raspberry Pi environments)
-    print("RPi.GPIO module not found. Using a mock version for non-Raspberry Pi environment.")
+    print(
+        "RPi.GPIO module not found. Using a mock version for non-Raspberry Pi environment."
+    )
 
     class GPIO:
         BOARD = None
@@ -44,7 +46,6 @@ except (ImportError, RuntimeError):
         @staticmethod
         def cleanup():
             pass
-
 
 
 class StepperMotor:

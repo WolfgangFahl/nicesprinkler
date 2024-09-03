@@ -5,10 +5,9 @@ Author: wf
 """
 
 import math
-from dataclasses import dataclass
 from typing import List
-from sprinkler.sprinkler_config import Hose, Point3D
 
+from sprinkler.sprinkler_config import Hose, Point3D
 
 
 class Parabolic:
@@ -16,7 +15,14 @@ class Parabolic:
     Parabolic trajectory calculations.
     """
 
-    def __init__(self, start_position: Point3D, initial_velocity: float, horizontal_angle: float, vertical_angle: float, gravity: float = 9.8):
+    def __init__(
+        self,
+        start_position: Point3D,
+        initial_velocity: float,
+        horizontal_angle: float,
+        vertical_angle: float,
+        gravity: float = 9.8,
+    ):
         self.start_position = start_position
         self.initial_velocity = initial_velocity
         self.horizontal_angle = horizontal_angle
@@ -48,7 +54,11 @@ class Parabolic:
             t = i * t_step
             x = self.initial_velocity * t * cos_v * cos_h
             y = self.initial_velocity * t * cos_v * sin_h
-            z = self.start_position.z + self.initial_velocity * t * sin_v - 0.5 * self.gravity * t**2
+            z = (
+                self.start_position.z
+                + self.initial_velocity * t * sin_v
+                - 0.5 * self.gravity * t**2
+            )
             point = self.start_position + Point3D(x, y, z)
             points.append(point)
 
@@ -62,7 +72,10 @@ class Parabolic:
             List[tuple]: A list of tuples, each containing two points representing a line segment.
         """
         points = self.calculate_trajectory()
-        return [(points[i].to_tuple(), points[i + 1].to_tuple()) for i in range(len(points) - 1)]
+        return [
+            (points[i].to_tuple(), points[i + 1].to_tuple())
+            for i in range(len(points) - 1)
+        ]
 
 
 class WaterJet:
@@ -99,7 +112,7 @@ class WaterJet:
             start_position=self.start_position,
             initial_velocity=self.hose.velocity,
             horizontal_angle=horizontal_angle,
-            vertical_angle=vertical_angle
+            vertical_angle=vertical_angle,
         )
 
     def calculate_trajectory(self, num_segments: int = 20) -> List[Point3D]:
@@ -113,7 +126,9 @@ class WaterJet:
             List[Point3D]: A list of points representing the trajectory.
         """
         if self.parabolic is None:
-            raise ValueError("Parabolic trajectory is not initialized. Call set_angles first.")
+            raise ValueError(
+                "Parabolic trajectory is not initialized. Call set_angles first."
+            )
         return self.parabolic.calculate_trajectory(num_segments)
 
     def get_line_segments(self) -> List[tuple]:
@@ -124,5 +139,7 @@ class WaterJet:
             List[tuple]: A list of tuples, each containing two points representing a line segment.
         """
         if self.parabolic is None:
-            raise ValueError("Parabolic trajectory is not initialized. Call set_angles first.")
+            raise ValueError(
+                "Parabolic trajectory is not initialized. Call set_angles first."
+            )
         return self.parabolic.get_line_segments()
