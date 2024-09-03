@@ -1,121 +1,128 @@
+"""
+Created on 2024-08-27
+
+Author: wf
+"""
+
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import List
+from sprinkler.sprinkler_config import Hose, Point3D
 
 
-@dataclass
-class Point3D:
-    x: float
-    y: float
-    z: float
 
-    def __add__(self, other):
-        # + infix: Point3D(1, 2, 3) + Point3D(4, 5, 6) -> Point3D(5, 7, 9)
-        return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
+class Parabolic:
+    """
+    Parabolic trajectory calculations.
+    """
 
-    def __mul__(self, scalar):
-        # * infix: Point3D(1, 2, 3) * 2 -> Point3D(2, 4, 6)
-        return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
+    def __init__(self, start_position: Point3D, initial_velocity: float, horizontal_angle: float, vertical_angle: float, gravity: float = 9.8):
+        self.start_position = start_position
+        self.initial_velocity = initial_velocity
+        self.horizontal_angle = horizontal_angle
+        self.vertical_angle = vertical_angle
+        self.gravity = gravity
 
-    def __rmul__(self, scalar):
-        # * infix (right): 2 * Point3D(1, 2, 3) -> Point3D(2, 4, 6)
-        return self.__mul__(scalar)
+    def calculate_trajectory(self, num_segments: int = 20) -> List[Point3D]:
+        """
+        Calculate the parabolic trajectory as a series of points (line segments).
 
-    def to_tuple(self):
-        return (self.x, self.y, self.z)
+        Args:
+            num_segments (int): Number of segments to divide the trajectory into.
 
+        Returns:
+            List[Point3D]: A list of points representing the trajectory.
+        """
+        v_rad = math.radians(self.vertical_angle)
+        h_rad = math.radians(self.horizontal_angle)
+        sin_v = math.sin(v_rad)
+        cos_v = math.cos(v_rad)
+        cos_h = math.cos(h_rad)
+        sin_h = math.sin(h_rad)
 
-@dataclass
-class JetParams:
-    start_position: Point3D
-    horizontal_angle: float
-    vertical_angle: float
-    pressure: float = 0.1  # bar
-    nozzle_diameter: float = 25.4 / 2  # mm (default 1/2 inch)
-    initial_velocity: float = field(init=False)
+        t_max = 2 * self.initial_velocity * sin_v / self.gravity  # Total flight time
+        t_step = t_max / num_segments  # Time step for each segment
 
-    def __post_init__(self):
-        pressure_pascal = self.pressure * 100000  # Convert bar to Pascal
-        density = 1000  # kg/m^3 (water density)
-        velocity = math.sqrt(2 * pressure_pascal / density)  # m/s
-        nozzle_radius_m = (self.nozzle_diameter / 2) / 1000  # Convert mm to m
-        flow_area = math.pi * nozzle_radius_m**2  # m^2
-        flow_rate = velocity * flow_area  # m^3/s
-        self.initial_velocity = flow_rate / flow_area  # m/s
-
-
-@dataclass
-class JetSpline:
-    start: Point3D
-    control1: Point3D
-    control2: Point3D
-    end: Point3D
-
-    def evaluate_spline(self, t):
-        """Evaluate the Bezier spline at the given parameter values."""
         points = []
-        spline = self
-        for ti in t:
-            p = (
-                (1 - ti) ** 3 * spline.start
-                + 3 * (1 - ti) ** 2 * ti * spline.control1
-                + 3 * (1 - ti) * ti**2 * spline.control2
-                + ti**3 * spline.end
-            )
-            points.append((p.x, p.y, p.z))
+        for i in range(num_segments + 1):
+            t = i * t_step
+            x = self.initial_velocity * t * cos_v * cos_h
+            y = self.initial_velocity * t * cos_v * sin_h
+            z = self.start_position.z + self.initial_velocity * t * sin_v - 0.5 * self.gravity * t**2
+            point = self.start_position + Point3D(x, y, z)
+            points.append(point)
+
         return points
+
+    def get_line_segments(self) -> List[tuple]:
+        """
+        Get the trajectory as a list of line segments for rendering.
+
+        Returns:
+            List[tuple]: A list of tuples, each containing two points representing a line segment.
+        """
+        points = self.calculate_trajectory()
+        return [(points[i].to_tuple(), points[i + 1].to_tuple()) for i in range(len(points) - 1)]
 
 
 class WaterJet:
-    def __init__(self, jet_params: JetParams):
-        self.jet_params = jet_params
-        self.gravity = 9.8
+    """
+    Water jet calculations for a sprinkler.
+    Handles the configuration of the water jet and calculates the trajectory using the Parabolic class.
+    """
 
-    @classmethod
-    def from_position(
-        cls,
-        x: float,
-        y: float,
-        z: float,
-        h_angle: float,
-        v_angle: float,
-        pressure: float,
-        nozzle_diameter: float = 25.4 / 2,
-    ):
-        return cls(
-            JetParams(Point3D(x, y, z), h_angle, v_angle, pressure, nozzle_diameter)
+    def __init__(self, start_position: Point3D, hose: Hose):
+        """
+        Initialize the WaterJet with a starting position and hose configuration.
+
+        Args:
+            start_position (Point3D): The starting position of the water jet.
+            hose (Hose): The hose configuration providing velocity and other properties.
+        """
+        self.start_position = start_position
+        self.hose = hose
+        self.horizontal_angle = None
+        self.vertical_angle = None
+        self.parabolic = None  # Initialize as None
+
+    def set_angles(self, horizontal_angle: float, vertical_angle: float):
+        """
+        Set the horizontal and vertical angles and initialize the Parabolic trajectory.
+
+        Args:
+            horizontal_angle (float): The horizontal angle of the spray.
+            vertical_angle (float): The vertical angle of the spray.
+        """
+        self.horizontal_angle = horizontal_angle
+        self.vertical_angle = vertical_angle
+        self.parabolic = Parabolic(
+            start_position=self.start_position,
+            initial_velocity=self.hose.velocity,
+            horizontal_angle=horizontal_angle,
+            vertical_angle=vertical_angle
         )
 
-    def _calculate_trajectory_params(self):
-        jp = self.jet_params
-        v_rad = math.radians(jp.vertical_angle)
-        sin_v = math.sin(v_rad)
-        cos_v = math.cos(v_rad)
+    def calculate_trajectory(self, num_segments: int = 20) -> List[Point3D]:
+        """
+        Calculate the parabolic trajectory as a series of points.
 
-        t_max = 2 * jp.initial_velocity * sin_v / self.gravity
-        max_distance = jp.initial_velocity * t_max * cos_v
-        max_height = jp.start_position.z + (jp.initial_velocity * sin_v) ** 2 / (
-            2 * self.gravity
-        )
+        Args:
+            num_segments (int): Number of segments to divide the trajectory into.
 
-        direction = Point3D(
-            math.cos(math.radians(jp.horizontal_angle)),
-            math.sin(math.radians(jp.horizontal_angle)),
-            0,
-        )
+        Returns:
+            List[Point3D]: A list of points representing the trajectory.
+        """
+        if self.parabolic is None:
+            raise ValueError("Parabolic trajectory is not initialized. Call set_angles first.")
+        return self.parabolic.calculate_trajectory(num_segments)
 
-        return max_distance, max_height, direction
+    def get_line_segments(self) -> List[tuple]:
+        """
+        Get the trajectory as a list of line segments for rendering.
 
-    def calculate_jet(self) -> JetSpline:
-        start = self.jet_params.start_position
-        max_distance, max_height, direction = self._calculate_trajectory_params()
-
-        end = start + direction * max_distance
-        end.z = 0  # Assuming water lands on ground
-
-        control1 = start + direction * (max_distance / 3)
-        control1.z = max_height
-
-        control2 = start + direction * (2 * max_distance / 3)
-        control2.z = (max_height + end.z) / 2
-
-        return JetSpline(start, control1, control2, end)
+        Returns:
+            List[tuple]: A list of tuples, each containing two points representing a line segment.
+        """
+        if self.parabolic is None:
+            raise ValueError("Parabolic trajectory is not initialized. Call set_angles first.")
+        return self.parabolic.get_line_segments()

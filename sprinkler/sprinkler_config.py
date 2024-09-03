@@ -8,6 +8,25 @@ from dataclasses import field
 from typing import  List
 from ngwidgets.yamlable import lod_storable
 from tabulate import tabulate
+
+@lod_storable
+class Point3D:
+    x: float
+    y: float
+    z: float
+
+    def __add__(self, other):
+        return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __mul__(self, scalar):
+        return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
+
+    def __rmul__(self, scalar):
+        return self.__mul__(scalar)
+
+    def to_tuple(self):
+        return (self.x, self.y, self.z)
+
 @lod_storable
 class Lawn:
     """
@@ -31,14 +50,10 @@ class Lawn:
         return self.area * rainfall_mm
 
 
-@lod_storable
-class SprinklerHead:
+class SprinklerHead(Point3D):
     """
     Sprinkler head position relative to lawn (meter)
     """
-    x: float
-    y: float
-    z: float
 
 
 @lod_storable

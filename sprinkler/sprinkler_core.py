@@ -18,7 +18,6 @@ class SprinklerSystem:
         self.config = SprinklerConfig.load_from_yaml_file(config_path)
         self.stl_mesh = mesh.Mesh.from_file(stl_file_path)
         self.stl_analysis = self.analyze_stl()
-        
 
 
     def analyze_stl(self):
