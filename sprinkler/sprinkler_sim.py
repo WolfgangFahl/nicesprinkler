@@ -42,6 +42,9 @@ class SprinklerSimulation:
         self.flow_label = None
 
     def init_control_values(self):
+        """
+        initializethe control values
+        """
         self.h_angle_min = 0
         self.h_angle_max = 180
         self.v_angle_min = 0
@@ -77,29 +80,26 @@ class SprinklerSimulation:
         self.move_camera()
 
     def setup_controls(self):
+        """
+        set up controls
+        """
         with self.scene_frame.button_row:
-            with ui.card() as self.controls_card:
-                SimpleSlider.add_slider(
-                    min=0, max=180, value=(self.h_angle_min, self.h_angle_max),
-                    label="Horizontal Angle °", target=self, bind_prop="h_angle", minmax=True,
-                )
-                SimpleSlider.add_slider(
-                    min=0, max=90, value=(self.v_angle_min, self.v_angle_max),
-                    label="Vertical Angle °", target=self, bind_prop="v_angle", minmax=True,
-                )
-                SimpleSlider.add_slider(
-                    min=0.1, max=1.5, value=self.water_pressure,
-                    label="Water Pressure (bar)", target=self, bind_prop="water_pressure",
-                )
-                SimpleSlider.add_slider(
-                    min=5, max=50, value=self.flow_rate,
-                    label="Flow Rate (l/min)", target=self, bind_prop="flow_rate",
-                )
-                SimpleSlider.add_slider(
-                    min=0.1, max=10, value=self.simulation_speed,
-                    label="Simulation Speed (x)", target=self, bind_prop="simulation_speed",
-                )
-                ui.switch("Dynamic Simulation").bind_value(self, "is_dynamic")
+            with ui.expansion('Controls', icon='work').classes('w-full'):
+                with ui.card() as self.controls_card:
+                    SimpleSlider.add_slider(
+                        min=0, max=180, value=(self.h_angle_min, self.h_angle_max),
+                        label="Horizontal Angle °", target=self, bind_prop="h_angle", minmax=True,
+                    )
+                    SimpleSlider.add_slider(
+                        min=0, max=90, value=(self.v_angle_min, self.v_angle_max),
+                        label="Vertical Angle °", target=self, bind_prop="v_angle", minmax=True,
+                    )
+                    SimpleSlider.add_slider(
+                        min=0.1, max=10, value=self.simulation_speed,
+                        label="Simulation Speed (x)", target=self, bind_prop="simulation_speed",
+                    )
+                    ui.switch("Dynamic Simulation").bind_value(self, "is_dynamic")
+                    self.flow_number=ui.number().bind_value(self, 'flow_rate')
 
     def setup_buttons(self):
         self.scene_frame.setup_button_row()
@@ -152,7 +152,13 @@ class SprinklerSimulation:
             flow_rate = (self.flow_measurement_volume / elapsed_time) * 60  # Convert to l/min
             ui.notify(f"Flow rate: {flow_rate:.2f} l/min")
 
-    def update_labels(self):
+    def update_water_info(self):
+        """
+        update time an flow labels
+        """
+        coverage = min(100, (self.total_water_sprinkled / 600) * 100)  # Assuming 600l for full coverage
+        ui.notify(f"Water sprinkled: {self.total_water_sprinkled:.2f}l, Time: {self.sprinkling_time:.2f}s, Coverage: {coverage:.2f}%")
+
         minutes, seconds = divmod(int(self.sprinkling_time), 60)
         self.time_label.set_text(f"Time: {minutes:02d}:{seconds:02d}")
         self.flow_label.set_text(f"Total Flow: {self.total_water_sprinkled:.2f} L")
@@ -168,7 +174,7 @@ class SprinklerSimulation:
 
             # Remove all water lines
             for line in self.water_lines:
-                self.scene.remove(line)
+                line.delete()
             self.water_lines.clear()
         except Exception as ex:
             self.solution.handle_exception(ex)
@@ -191,7 +197,6 @@ class SprinklerSimulation:
                 spline = jet.calculate_jet()
                 self.draw_water_line(spline)
                 self.update_water_info()
-                self.update_labels()
 
                 if self.has_icon_name(self.simulation_button.icon,"play_circle"):
                     self.update_timer.cancel()
@@ -201,6 +206,9 @@ class SprinklerSimulation:
         self.update_timer = ui.timer(0.5, update_static)
 
     def simulate_dynamic(self):
+        """
+        dynamic simulation
+        """
         self.current_h_angle = self.h_angle_min
         self.current_v_angle = self.v_angle_min
         self.h_direction = 1
@@ -230,13 +238,12 @@ class SprinklerSimulation:
                 if self.current_v_angle >= self.v_angle_max or self.current_v_angle <= self.v_angle_min:
                     self.v_direction *= -1
 
-                self.update_labels()
-
                 if self.has_icon_name(self.simulation_button.icon,"play_circle"):
                     self.update_timer.cancel()
             except Exception as ex:
                 self.solution.handle_exception(ex)
 
+        # 20 updates per seconds
         self.update_timer = ui.timer(0.05, update_dynamic)
 
     def draw_water_line(self, spline: JetSpline):
@@ -257,13 +264,9 @@ class SprinklerSimulation:
         while len(self.water_lines) > 1000:
             old_line = self.water_lines.pop(0)
             try:
-                self.scene.remove(old_line)
+                old_line.delete()
             except Exception as ex:
                 pass
-
-    def update_water_info(self):
-        coverage = min(100, (self.total_water_sprinkled / 600) * 100)  # Assuming 600l for full coverage
-        ui.notify(f"Water sprinkled: {self.total_water_sprinkled:.2f}l, Time: {self.sprinkling_time:.2f}s, Coverage: {coverage:.2f}%")
 
     def add_lawn(self):
         with self.scene.group().move(x=self.cx, y=self.cy):

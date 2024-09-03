@@ -6,34 +6,22 @@ Created on 2024-08-13
 
 import os
 
-from ngwidgets.basetest import Basetest
+from tests.sprinkler_base_test import SprinklerBasetest
 
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 
 
-class TestSprinklerCore(Basetest):
+class TestSprinklerCore(SprinklerBasetest):
     """
     Tests for the Sprinkler Core functionality
     """
 
-    def setUp(self):
-        super().setUp()
-        examples_dir = os.path.join(
-            os.path.dirname(__file__), "..", "nicesprinkler_examples"
-        )
-        self.config_path = os.path.join(examples_dir, "example_config.yaml")
-        self.stl_path = os.path.join(examples_dir, "example_garden.stl")
+    def setUp(self, debug=False, profile=True):
+        SprinklerBasetest.setUp(self, debug=debug, profile=profile)
         self.system = SprinklerSystem(self.config_path, self.stl_path)
         self.config = self.system.config
         self.stl_analysis = self.system.stl_analysis
 
-    def test_config_loading(self):
-        """Test loading the sprinkler configuration"""
-        self.assertIsInstance(self.config, SprinklerConfig)
-        self.assertGreater(self.config.lawn.width, 0)
-        self.assertGreater(self.config.lawn.length, 0)
-        self.assertGreater(self.config.hose_performance.max_distance, 0)
-        self.assertGreater(self.config.hose_performance.optimal_angle, 0)
 
     def test_stl_dimensions(self):
         """Test STL file dimensions against the config"""

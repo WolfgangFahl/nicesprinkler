@@ -3,18 +3,33 @@
 # Updated nicesprinkler example configuration
 
 lawn:
-  width: 6.0
-  length: 11.0
-sprinkler_position:
-  x: 3.0
+  width: 6.1
+  length: 14.6
+
+sprinkler_head:
+  x: 3.05
   y: 0.0
   z: 1.2
-initial_angles:
-  horizontal: 0
-  vertical: 45
-hose_performance:
-  max_distance: 8.0
-  optimal_angle: 45
+
+angles:
+  horizontal:
+    min: -85
+    max: 85
+    initial: 0
+    step: 2
+  vertical:
+    min: -75
+    max: 75
+    initial: 0
+    step: 2
+
+hose:
+   diameter: 12.7 # half inch
+   flow_rate: 20 # l/min
+   max_distance: 13.6 # maximum spray distance (m)
+   max_height: 5.7 # maximum spray height (m)
+
+
 motors:
   horizontal:
     ena_pin: 37
