@@ -45,7 +45,9 @@ class Parabolic:
         v0_y = self.initial_velocity * math.cos(v_rad) * math.sin(h_rad)
         v0_z = self.initial_velocity * math.sin(v_rad)
 
-        t_max = (v0_z + math.sqrt(v0_z**2 + 2*self.gravity*self.start_position.z)) / self.gravity
+        t_max = (
+            v0_z + math.sqrt(v0_z**2 + 2 * self.gravity * self.start_position.z)
+        ) / self.gravity
         t_step = t_max / num_segments
 
         points = []

@@ -39,7 +39,9 @@ class Lawn:
 
     width: float
     length: float
-    rainfall_mm: float = 10 # default rainfall equivalent needed to properly wet the lawn
+    rainfall_mm: float = (
+        10  # default rainfall equivalent needed to properly wet the lawn
+    )
 
     area: float = field(init=False)  # This field is not expected as input
 
@@ -47,7 +49,7 @@ class Lawn:
         # Calculate the area after the object is initialized
         self.area = self.width * self.length
 
-    def rain_mm_to_l(self, rainfall_mm: float=None) -> float:
+    def rain_mm_to_l(self, rainfall_mm: float = None) -> float:
         """
         Calculate the volume of rainwater in liters given the rainfall in millimeters.
         """

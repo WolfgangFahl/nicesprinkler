@@ -6,15 +6,13 @@ Created on 2024-08-13
 
 import os
 from typing import List
+
 from ngwidgets.scene_frame import SceneFrame
 from nicegui import ui
 
 from sprinkler.slider import SimpleSlider
 from sprinkler.sprinkler_core import SprinklerSystem
-from sprinkler.waterjet import (  # Import the existing WaterJet module
-    Point3D,
-    WaterJet,
-)
+from sprinkler.waterjet import Point3D, WaterJet  # Import the existing WaterJet module
 
 
 class SprinklerSimulation:
@@ -179,7 +177,9 @@ class SprinklerSimulation:
         update time an flow labels
         """
         lawn = self.sprinkler_system.config.lawn
-        total_water_needed = lawn.rain_mm_to_l()  # Uses the default rainfall_mm if not specified
+        total_water_needed = (
+            lawn.rain_mm_to_l()
+        )  # Uses the default rainfall_mm if not specified
 
         coverage = min(100, (self.total_water_sprinkled / total_water_needed) * 100)
         minutes, seconds = divmod(int(self.sprinkling_time), 60)
@@ -208,8 +208,10 @@ class SprinklerSimulation:
             try:
                 sprinkler_pos = self.sprinkler_system.config.sprinkler_head
                 jet = WaterJet(
-                    start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
-                    hose=self.sprinkler_system.config.hose
+                    start_position=Point3D(
+                        sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z
+                    ),
+                    hose=self.sprinkler_system.config.hose,
                 )
                 jet.set_angles(self.h_angle, self.v_angle)
                 trajectory = jet.calculate_trajectory()
@@ -233,8 +235,10 @@ class SprinklerSimulation:
             try:
                 sprinkler_pos = self.sprinkler_system.config.sprinkler_head
                 jet = WaterJet(
-                    start_position=Point3D(sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z),
-                    hose=self.sprinkler_system.config.hose
+                    start_position=Point3D(
+                        sprinkler_pos.x, sprinkler_pos.y, sprinkler_pos.z
+                    ),
+                    hose=self.sprinkler_system.config.hose,
                 )
                 jet.set_angles(self.current_h_angle, self.current_v_angle)
                 trajectory = jet.calculate_trajectory()
@@ -243,11 +247,17 @@ class SprinklerSimulation:
 
                 # Update angles
                 self.current_h_angle += self.h_direction * self.simulation_speed
-                if self.current_h_angle >= self.h_angle_max or self.current_h_angle <= self.h_angle_min:
+                if (
+                    self.current_h_angle >= self.h_angle_max
+                    or self.current_h_angle <= self.h_angle_min
+                ):
                     self.h_direction *= -1
 
                 self.current_v_angle += self.v_direction * (self.simulation_speed / 2)
-                if self.current_v_angle >= self.v_angle_max or self.current_v_angle <= self.v_angle_min:
+                if (
+                    self.current_v_angle >= self.v_angle_max
+                    or self.current_v_angle <= self.v_angle_min
+                ):
                     self.v_direction *= -1
 
                 if self.has_icon_name(self.simulation_button, "play_circle"):
@@ -267,7 +277,9 @@ class SprinklerSimulation:
 
         # Calculate water sprinkled
         time_step = 0.05  # seconds
-        self.total_water_sprinkled += (self.flow_rate / 60) * time_step  # Convert l/min to l/s
+        self.total_water_sprinkled += (
+            self.flow_rate / 60
+        ) * time_step  # Convert l/min to l/s
         self.sprinkling_time += time_step
 
         # Remove old lines if there are too many
@@ -284,7 +296,9 @@ class SprinklerSimulation:
     def add_garden3d(self):
         stl_filename = os.path.basename(self.sprinkler_system.stl_file_path)
         stl_url = f"/examples/{stl_filename}"
-        self.garden_model = self.scene_frame.load_stl(stl_filename, stl_url, scale=0.001)
+        self.garden_model = self.scene_frame.load_stl(
+            stl_filename, stl_url, scale=0.001
+        )
 
     def add_sprinkler(self):
         sprinkler_pos = self.sprinkler_system.config.sprinkler_head
