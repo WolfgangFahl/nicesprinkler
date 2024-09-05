@@ -194,7 +194,7 @@ class SprinklerSimulation:
             self.solution.toggle_icon(self.flow_measurement_button)
             self.total_water_sprinkled = 0
             self.sprinkling_time = 0
-            self.update_labels()
+            self.update_water_info()
 
             # Remove all water lines
             for line in self.water_lines:
