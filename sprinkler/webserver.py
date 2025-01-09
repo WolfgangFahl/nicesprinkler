@@ -1,5 +1,5 @@
 """
-Created on 13.08.2024
+Created on 2024-08-13
 
 @author: wf
 """
@@ -26,7 +26,7 @@ class NiceSprinklerWebServer(InputWebserver):
         config = WebserverConfig(
             copy_right=copy_right,
             version=Version(),
-            default_port=9859,
+            default_port=9848,
             short_name="nicesprinkler",
         )
         server_config = WebserverConfig.get(config)
