@@ -1,7 +1,7 @@
 # nicesprinkler
 Computer Controlled 2 Stepper motor 3D lawn sprinkler system
 
-[![pypi](https://img.shields.io/pypi/pyversions/nicesprinkler)](https://pypi.org/project/nicesprinkler/) in /Users/wf/py-workspace/nicesprinkler/README.md
+[![pypi](https://img.shields.io/pypi/pyversions/nicesprinkler)](https://pypi.org/project/nicesprinkler/) 
 [![Github Actions Build](https://github.com/WolfgangFahl/nicesprinkler/actions/workflows/build.yml/badge.svg)](https://github.com/WolfgangFahl/nicesprinkler/actions/workflows/build.yml)
 [![PyPI Status](https://img.shields.io/pypi/v/nicesprinkler.svg)](https://pypi.python.org/pypi/nicesprinkler/)
 [![GitHub issues](https://img.shields.io/github/issues/WolfgangFahl/nicesprinkler.svg)](https://github.com/WolfgangFahl/nicesprinkler/issues)

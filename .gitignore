@@ -165,3 +165,5 @@ docs
 #.idea/
 # Mac
 .DS_Store
+# VENV
+sprinkler_venv
