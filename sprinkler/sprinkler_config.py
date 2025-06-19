@@ -8,7 +8,7 @@ import math
 from dataclasses import field
 from typing import List
 
-from ngwidgets.yamlable import lod_storable
+from basemkit.yamlable import lod_storable
 from tabulate import tabulate
 
 

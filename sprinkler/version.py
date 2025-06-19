@@ -18,7 +18,7 @@ class Version(object):
     name = "nicesprinkler"
     version = sprinkler.__version__
     date = "2024-08-13"
-    updated = "2024-08-10"
+    updated = "2025-06-19"
     description = "Computer Controlled 2 Stepper motor 3D lawn sprinkler system"
 
     authors = "Wolfgang Fahl"
@@ -27,7 +27,7 @@ class Version(object):
     chat_url = "https://github.com/WolfgangFahl/nicesprinkler/discussions"
     cm_url = "https://github.com/WolfgangFahl/nicesprinkler"
 
-    license = f"""Copyright 2024 contributors. All rights reserved.
+    license = f"""Copyright 2024-2025 contributors. All rights reserved.
 
   Licensed under the Apache License 2.0
   http://www.apache.org/licenses/LICENSE-2.0
