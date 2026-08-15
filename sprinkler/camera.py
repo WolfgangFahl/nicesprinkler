@@ -57,21 +57,22 @@ class Camera:
 
     def read_frames(self):
         """Keep the newest jpeg frame of the device."""
-        from linuxpy.video.device import Device
+        from linuxpy.video.device import Device, VideoCapture
 
         with Device(self.device) as cam:
-            capture = cam.video_capture
+            capture = VideoCapture(cam)
             capture.set_format(self.width, self.height, "MJPG")
             try:
                 capture.set_fps(self.fps)
             except Exception:
-                # not every driver allows the rate to be set
+                # not every driver lets the rate be set
                 pass
-            for frame in cam:
-                if not self.running:
-                    break
-                self.latest = bytes(frame)
-                self.latest_time = time.time()
+            with capture:
+                for frame in capture:
+                    if not self.running:
+                        break
+                    self.latest = bytes(frame)
+                    self.latest_time = time.time()
 
     def frame(self) -> bytes:
         """The newest frame as jpeg bytes, empty while none has arrived."""
