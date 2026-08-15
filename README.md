@@ -15,6 +15,8 @@ the other lifts, and the jet lands where the software says it should —
 if the software knows the truth about the garden. Getting it to know
 that is the interesting part.
 
+[▶ watch it run](https://download.bitplan.com/lawnsprinkler/20240811_sprinkler.mp4) — two minutes of the real machine watering a real lawn.
+
 ![the garden in 3D](images/20260815_185510_lawn_home_page.png)
 
 ## What it does
