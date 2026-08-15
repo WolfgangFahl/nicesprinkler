@@ -24,9 +24,8 @@ class NiceSprinklerWebServer(InputWebserver):
 
     @classmethod
     def get_config(cls) -> WebserverConfig:
-        copy_right = "(c)2024 Wolfgang Fahl"
         config = WebserverConfig(
-            copy_right=copy_right,
+            copy_right=Version.copy_right,
             version=Version(),
             default_port=9848,
             short_name="nicesprinkler",

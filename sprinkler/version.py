@@ -23,11 +23,15 @@ class Version(object):
 
     authors = "Wolfgang Fahl"
 
+    # the one place the year range is written; date and updated feed it
+    years = f"{date[:4]}-{updated[:4]}"
+    copy_right = f"(c){years} {authors}"
+
     doc_url = "https://wiki.bitplan.com/index.php/nicesprinkler"
     chat_url = "https://github.com/WolfgangFahl/nicesprinkler/discussions"
     cm_url = "https://github.com/WolfgangFahl/nicesprinkler"
 
-    license = f"""Copyright 2024-2025 contributors. All rights reserved.
+    license = f"""Copyright {years} contributors. All rights reserved.
 
   Licensed under the Apache License 2.0
   http://www.apache.org/licenses/LICENSE-2.0
