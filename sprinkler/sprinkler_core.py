@@ -13,6 +13,7 @@ class SprinklerSystem:
     """
 
     def __init__(self, config_path: str, stl_file_path: str):
+        self.config_path = config_path
         self.stl_file_path = stl_file_path
         self.config = SprinklerConfig.load_from_yaml_file(config_path)
         self.stl=STL3D(stl_file_path)

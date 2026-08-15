@@ -10,6 +10,7 @@ from ngwidgets.input_webserver import InputWebserver, InputWebSolution
 from ngwidgets.webserver import WebserverConfig
 from nicegui import Client, app, ui
 
+from sprinkler.calibration import CalibrationView
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 from sprinkler.sprinkler_head import SprinklerHeadView
 from sprinkler.sprinkler_sim import SprinklerSimulation
@@ -45,6 +46,10 @@ class NiceSprinklerWebServer(InputWebserver):
         @ui.page("/sprinkler-head")
         async def sprinkler_head(client: Client):
             return await self.page(client, NiceSprinklerSolution.sprinkler_head)
+
+        @ui.page("/calibration")
+        async def calibration(client: Client):
+            return await self.page(client, NiceSprinklerSolution.calibration)
 
     def configure_run(self):
         """
@@ -103,6 +108,7 @@ class NiceSprinklerSolution(InputWebSolution):
         """
         self.link_button(name="remote", icon_name="play_circle", target="/remote")
         self.link_button(name="head", icon_name="circle", target="/sprinkler-head")
+        self.link_button(name="calibration", icon_name="timer", target="/calibration")
 
     async def remote(self):
         def setup_remote():
@@ -117,6 +123,15 @@ class NiceSprinklerSolution(InputWebSolution):
             self.sphv.setup_ui()
 
         await self.setup_content_div(setup_sprinkler_head)
+
+    async def calibration(self):
+        def setup_calibration():
+            self.calibration_view = CalibrationView(
+                self, self.webserver.sprinkler_system
+            )
+            self.calibration_view.setup_ui()
+
+        await self.setup_content_div(setup_calibration)
 
     async def home(self):
         """Generates the home page with a 3D viewer and controls for the sprinkler."""
