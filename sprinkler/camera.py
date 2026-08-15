@@ -5,10 +5,9 @@ Created on 2026-08-15
 """
 
 import os
-import subprocess
-import tempfile
+import threading
 import time
-from typing import Iterator
+from typing import Iterator, Optional
 
 from nicegui import app, ui
 from starlette.responses import PlainTextResponse, Response, StreamingResponse
@@ -16,12 +15,11 @@ from starlette.responses import PlainTextResponse, Response, StreamingResponse
 
 class Camera:
     """
-    A v4l2 camera kept as a running stream so that the automatic exposure
-    stays converged.
+    A v4l2 camera read directly with linuxpy.
 
-    A single grabbed frame is unusable - the exposure needs about 60 frames
-    to settle, which costs some 10 s per picture. ffmpeg therefore writes
-    the newest frame to a file continuously and the page reads that file.
+    The camera already delivers MJPEG, so its jpeg frames are passed on
+    untouched - no decoding, no encoding, no subprocess. A single reader
+    thread keeps the newest frame, which every viewer shares.
     """
 
     def __init__(
@@ -29,14 +27,16 @@ class Camera:
         device: str = "/dev/video0",
         width: int = 1600,
         height: int = 896,
-        fps: int = 2,
+        fps: int = 5,
     ):
         self.device = device
         self.width = width
         self.height = height
         self.fps = fps
-        self.process = None
-        self.frame_path = os.path.join(tempfile.gettempdir(), "nicesprinkler_devcam.jpg")
+        self.latest: Optional[bytes] = None
+        self.latest_time: float = 0.0
+        self.thread = None
+        self.running = False
 
     @property
     def available(self) -> bool:
@@ -44,35 +44,42 @@ class Camera:
         return os.path.exists(self.device)
 
     def start(self):
-        """Start the ffmpeg stream if it is not running yet."""
-        if self.process and self.process.poll() is None:
+        """Start the reader thread if it is not running yet."""
+        if self.running:
             return
-        cmd = [
-            "ffmpeg",
-            "-nostdin",
-            "-loglevel", "error",
-            "-f", "v4l2",
-            "-input_format", "mjpeg",
-            "-video_size", f"{self.width}x{self.height}",
-            "-i", self.device,
-            "-vf", f"fps={self.fps}",
-            "-update", "1",
-            "-y", self.frame_path,
-        ]
-        self.process = subprocess.Popen(cmd)
+        self.running = True
+        self.thread = threading.Thread(target=self.read_frames, daemon=True)
+        self.thread.start()
 
     def stop(self):
-        """Stop the ffmpeg stream."""
-        if self.process and self.process.poll() is None:
-            self.process.terminate()
-        self.process = None
+        """Stop the reader thread."""
+        self.running = False
+
+    def read_frames(self):
+        """Keep the newest jpeg frame of the device."""
+        from linuxpy.video.device import Device
+
+        with Device(self.device) as cam:
+            capture = cam.video_capture
+            capture.set_format(self.width, self.height, "MJPG")
+            try:
+                capture.set_fps(self.fps)
+            except Exception:
+                # not every driver allows the rate to be set
+                pass
+            for frame in cam:
+                if not self.running:
+                    break
+                self.latest = bytes(frame)
+                self.latest_time = time.time()
 
     def frame(self) -> bytes:
-        """The newest frame as jpeg bytes, empty while none has been written."""
-        if not os.path.exists(self.frame_path):
-            return b""
-        with open(self.frame_path, "rb") as jpeg:
-            return jpeg.read()
+        """The newest frame as jpeg bytes, empty while none has arrived."""
+        return self.latest if self.latest else b""
+
+    def age(self) -> float:
+        """Seconds since the newest frame arrived."""
+        return time.time() - self.latest_time if self.latest_time else -1.0
 
     def mjpeg(self) -> Iterator[bytes]:
         """
@@ -82,11 +89,12 @@ class Camera:
         place, so there is no reload flicker as with a polled src.
         """
         boundary = b"--frame\r\n"
+        last = 0.0
         while True:
-            jpeg = self.frame()
-            if jpeg:
-                yield boundary + b"Content-Type: image/jpeg\r\n\r\n" + jpeg + b"\r\n"
-            time.sleep(1.0 / self.fps)
+            if self.latest and self.latest_time != last:
+                last = self.latest_time
+                yield boundary + b"Content-Type: image/jpeg\r\n\r\n" + self.latest + b"\r\n"
+            time.sleep(1.0 / (self.fps * 2))
 
 
 class CameraView:
@@ -99,12 +107,11 @@ class CameraView:
 
     def __init__(self, solution):
         self.solution = solution
-        self.counter = 0
         self.add_route()
 
     @classmethod
     def add_route(cls):
-        """Serve the newest frame once per server, not once per client."""
+        """Serve the frames once per server, not once per client."""
         if cls.route_added:
             return
 
@@ -126,6 +133,10 @@ class CameraView:
                 media_type="multipart/x-mixed-replace; boundary=frame",
             )
 
+        @app.get("/camera/age")
+        def camera_age():
+            return {"age": cls.camera.age(), "fps": cls.camera.fps}
+
         cls.route_added = True
 
     def setup_ui(self):
@@ -136,8 +147,6 @@ class CameraView:
                 ui.label(f"no camera on {self.camera.device}")
                 return
             self.camera.start()
-            # the mjpeg stream replaces the picture in place - no polling,
-            # no reload flicker
             ui.html(
                 '<img src="/camera/stream" style="width:100%;height:auto" '
                 'alt="device camera">'
