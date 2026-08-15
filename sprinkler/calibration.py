@@ -66,9 +66,13 @@ class CalibrationView:
             ui.label("Flow Calibration").classes("text-h6")
 
             ui.label("Bucket size in liters")
-            ui.slider(min=5, max=30, step=1, value=self.measurement.bucket_size).props(
-                "label-always"
-            ).on("change", lambda e: self.set_bucket_size(e.value))
+            ui.slider(
+                min=5,
+                max=30,
+                step=1,
+                value=self.measurement.bucket_size,
+                on_change=lambda e: self.set_bucket_size(e.value),
+            ).props("label-always")
 
             with ui.row():
                 self.watch_button = ui.button("Start", icon="timer", on_click=self.toggle_watch)

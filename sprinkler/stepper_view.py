@@ -92,28 +92,24 @@ class StepperView:
                 )
 
             ui.label("Horizontal Position")
-            self.motor_h.slider = (
-                ui.slider(min=0, max=360, value=self.motor_h.position)
-                .props("label-always")
-                .on(
-                    "change",
-                    lambda e: self.motor_h.update_position(
-                        self.move_controller, e.value, 10
-                    ),
-                )
-            )
+            self.motor_h.slider = ui.slider(
+                min=0,
+                max=360,
+                value=self.motor_h.position,
+                on_change=lambda e: self.motor_h.update_position(
+                    self.move_controller, e.value, 10
+                ),
+            ).props("label-always")
 
             ui.label("Vertical Position")
-            self.motor_v.slider = (
-                ui.slider(min=0, max=360, value=self.motor_v.position)
-                .props("label-always")
-                .on(
-                    "change",
-                    lambda e: self.motor_v.update_position(
-                        self.move_controller, e.value, 10
-                    ),
-                )
-            )
+            self.motor_v.slider = ui.slider(
+                min=0,
+                max=360,
+                value=self.motor_v.position,
+                on_change=lambda e: self.motor_v.update_position(
+                    self.move_controller, e.value, 10
+                ),
+            ).props("label-always")
 
     def toggle_motor(self, motor: MotorView, enabled: bool):
         if enabled:

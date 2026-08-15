@@ -11,6 +11,7 @@ from ngwidgets.webserver import WebserverConfig
 from nicegui import Client, app, ui
 
 from sprinkler.calibration import CalibrationView
+from sprinkler.camera import CameraView
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 from sprinkler.sprinkler_head import SprinklerHeadView
 from sprinkler.sprinkler_sim import SprinklerSimulation
@@ -112,8 +113,15 @@ class NiceSprinklerSolution(InputWebSolution):
 
     async def remote(self):
         def setup_remote():
-            self.stepper_control = StepperView(self, self.webserver.sprinkler_system)
-            self.stepper_control.setup_ui()
+            with ui.row().classes("w-full no-wrap"):
+                with ui.column().classes("w-1/2"):
+                    self.stepper_control = StepperView(
+                        self, self.webserver.sprinkler_system
+                    )
+                    self.stepper_control.setup_ui()
+                with ui.column().classes("w-1/2"):
+                    self.camera_view = CameraView(self)
+                    self.camera_view.setup_ui()
 
         await self.setup_content_div(setup_remote)
 
@@ -145,9 +153,9 @@ class NiceSprinklerSolution(InputWebSolution):
     def configure_settings(self):
         """Generates the settings page with options to modify sprinkler configuration."""
         config_str = self.webserver.sprinkler_system.config.to_yaml()
-        ui.textarea("Configuration", value=config_str).classes("w-full").on(
-            "change", self.update_config
-        )
+        ui.textarea(
+            "Configuration", value=config_str, on_change=self.update_config
+        ).classes("w-full")
 
     def update_config(self, e):
         """Updates the simulation configuration based on user input."""
