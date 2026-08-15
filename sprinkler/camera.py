@@ -193,6 +193,9 @@ class CameraView:
 
         @app.get("/camera/frame")
         def camera_frame():
+            # a frame may be asked for without a page being open
+            if cls.camera.available:
+                cls.camera.start()
             jpeg = cls.camera.frame()
             if not jpeg:
                 return PlainTextResponse("no frame", status_code=503)
@@ -204,6 +207,8 @@ class CameraView:
 
         @app.get("/camera/stream")
         def camera_stream():
+            if cls.camera.available:
+                cls.camera.start()
             return StreamingResponse(
                 cls.camera.mjpeg(),
                 media_type="multipart/x-mixed-replace; boundary=frame",
