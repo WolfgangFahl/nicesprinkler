@@ -18,7 +18,7 @@ class Version(object):
     name = "nicesprinkler"
     version = sprinkler.__version__
     date = "2024-08-13"
-    updated = "2025-06-19"
+    updated = "2026-08-15"
     description = "Computer Controlled 2 Stepper motor 3D lawn sprinkler system"
 
     authors = "Wolfgang Fahl"
