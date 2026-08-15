@@ -7,9 +7,11 @@ Created on 2026-08-15
 import os
 import subprocess
 import tempfile
+import time
+from typing import Iterator
 
 from nicegui import app, ui
-from starlette.responses import PlainTextResponse, Response
+from starlette.responses import PlainTextResponse, Response, StreamingResponse
 
 
 class Camera:
@@ -72,6 +74,20 @@ class Camera:
         with open(self.frame_path, "rb") as jpeg:
             return jpeg.read()
 
+    def mjpeg(self) -> Iterator[bytes]:
+        """
+        Multipart mjpeg stream of the newest frames.
+
+        The browser keeps one connection open and replaces the image in
+        place, so there is no reload flicker as with a polled src.
+        """
+        boundary = b"--frame\r\n"
+        while True:
+            jpeg = self.frame()
+            if jpeg:
+                yield boundary + b"Content-Type: image/jpeg\r\n\r\n" + jpeg + b"\r\n"
+            time.sleep(1.0 / self.fps)
+
 
 class CameraView:
     """
@@ -103,20 +119,26 @@ class CameraView:
                 headers={"Cache-Control": "no-store"},
             )
 
+        @app.get("/camera/stream")
+        def camera_stream():
+            return StreamingResponse(
+                cls.camera.mjpeg(),
+                media_type="multipart/x-mixed-replace; boundary=frame",
+            )
+
         cls.route_added = True
 
     def setup_ui(self):
         """Show the live view, or say why there is none."""
-        with ui.card():
+        with ui.card().classes("w-full"):
             ui.label("Device Camera").classes("text-h6")
             if not self.camera.available:
                 ui.label(f"no camera on {self.camera.device}")
                 return
             self.camera.start()
-            self.image = ui.image("/camera/frame").classes("w-full")
-            ui.timer(1.0, self.refresh)
-
-    def refresh(self):
-        """Ask the browser for a new frame by changing the url."""
-        self.counter += 1
-        self.image.set_source(f"/camera/frame?n={self.counter}")
+            # the mjpeg stream replaces the picture in place - no polling,
+            # no reload flicker
+            ui.html(
+                '<img src="/camera/stream" style="width:100%;height:auto" '
+                'alt="device camera">'
+            ).classes("w-full")
