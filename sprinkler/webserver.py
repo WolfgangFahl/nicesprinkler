@@ -122,7 +122,7 @@ class NiceSprinklerSolution(InputWebSolution):
                     )
                     self.stepper_control.setup_ui()
                 with ui.column().classes("w-1/2"):
-                    self.camera_view = CameraView(self)
+                    self.camera_view = CameraView(self, stepper=self.stepper_control)
                     self.camera_view.setup_ui()
 
         await self.setup_content_div(setup_remote)

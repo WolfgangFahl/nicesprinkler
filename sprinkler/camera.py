@@ -4,6 +4,7 @@ Created on 2026-08-15
 @author: wf
 """
 
+import json
 import os
 import threading
 import time
@@ -98,6 +99,78 @@ class Camera:
             time.sleep(1.0 / (self.fps * 2))
 
 
+class Recorder:
+    """
+    Writes camera frames with the commanded motor angles beside them.
+
+    A frame without its commanded position is not calibration data, so
+    every frame gets a json sidecar of the same name.
+    """
+
+    def __init__(self, camera: "Camera", stepper=None, base_dir: str = None):
+        self.camera = camera
+        self.stepper = stepper
+        self.base_dir = base_dir or os.path.expanduser("~/nicesprinkler_records")
+        self.session_id = None
+        self.session_dir = None
+        self.frame_no = 0
+        self.recording = False
+
+    def start(self, fpm: int) -> str:
+        """Open a session directory and start counting frames."""
+        self.session_id = time.strftime("%Y%m%d_%H%M%S")
+        self.session_dir = os.path.join(self.base_dir, self.session_id)
+        os.makedirs(self.session_dir, exist_ok=True)
+        self.frame_no = 0
+        self.fpm = fpm
+        self.recording = True
+        return self.session_dir
+
+    def stop(self):
+        self.recording = False
+
+    def angles(self) -> dict:
+        """The commanded angles, or nulls when no stepper view is attached."""
+        if self.stepper is None:
+            return {"commanded_h_angle": None, "commanded_v_angle": None,
+                    "h_enabled": None, "v_enabled": None}
+        return {
+            "commanded_h_angle": self.stepper.motor_h.position,
+            "commanded_v_angle": self.stepper.motor_v.position,
+            "h_enabled": self.stepper.motor_h.enabled,
+            "v_enabled": self.stepper.motor_v.enabled,
+        }
+
+    def record_frame(self) -> Optional[str]:
+        """Write one frame and its sidecar; returns the frame path."""
+        if not self.recording:
+            return None
+        jpeg = self.camera.frame()
+        if not jpeg:
+            return None
+        stamp = time.strftime("%Y%m%d_%H%M%S")
+        name = f"{stamp}_{self.frame_no:05d}"
+        frame_path = os.path.join(self.session_dir, f"{name}_devcam.jpg")
+        with open(frame_path, "wb") as out:
+            out.write(jpeg)
+        sidecar = {
+            "session_id": self.session_id,
+            "frame_no": self.frame_no,
+            "file": os.path.basename(frame_path),
+            "time": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "monotonic": time.monotonic(),
+            "frame_age": self.camera.age(),
+            "frames_per_minute": self.fpm,
+            "width": self.camera.width,
+            "height": self.camera.height,
+        }
+        sidecar.update(self.angles())
+        with open(os.path.join(self.session_dir, f"{name}.json"), "w") as out:
+            json.dump(sidecar, out, indent=2)
+        self.frame_no += 1
+        return frame_path
+
+
 class CameraView:
     """
     Live camera view for the remote control page.
@@ -106,8 +179,10 @@ class CameraView:
     camera = Camera()
     route_added = False
 
-    def __init__(self, solution):
+    def __init__(self, solution, stepper=None):
         self.solution = solution
+        self.recorder = Recorder(self.camera, stepper)
+        self.timer = None
         self.add_route()
 
     @classmethod
@@ -152,3 +227,46 @@ class CameraView:
                 '<img src="/camera/stream" style="width:100%;height:auto" '
                 'alt="device camera">'
             ).classes("w-full")
+            self.setup_recording()
+
+    def setup_recording(self):
+        """Record button and frames per minute slider."""
+        self.fpm = 60
+        with ui.row().classes("items-center w-full"):
+            self.record_button = ui.button(
+                "Record", icon="fiber_manual_record", on_click=self.toggle_record
+            )
+            ui.label("frames per minute")
+            ui.slider(
+                min=1,
+                max=120,
+                step=1,
+                value=self.fpm,
+                on_change=lambda e: self.set_fpm(e.value),
+            ).props("label-always").classes("w-64")
+        self.record_label = ui.label("")
+
+    def set_fpm(self, fpm: int):
+        self.fpm = int(fpm)
+
+    def toggle_record(self):
+        """Start the recording on the first click, stop it on the second."""
+        if self.recorder.recording:
+            self.recorder.stop()
+            if self.timer:
+                self.timer.deactivate()
+            self.record_button.set_text("Record")
+            self.record_label.set_text(
+                f"{self.recorder.frame_no} frames in {self.recorder.session_dir}"
+            )
+        else:
+            session_dir = self.recorder.start(self.fpm)
+            self.timer = ui.timer(60.0 / self.fpm, self.record_frame)
+            self.record_button.set_text("Stop")
+            self.record_label.set_text(f"recording to {session_dir}")
+
+    def record_frame(self):
+        self.recorder.record_frame()
+        self.record_label.set_text(
+            f"{self.recorder.frame_no} frames in {self.recorder.session_dir}"
+        )
