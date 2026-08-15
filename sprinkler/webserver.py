@@ -39,6 +39,8 @@ class NiceSprinklerWebServer(InputWebserver):
         """Constructs all the necessary attributes for the WebServer object."""
         InputWebserver.__init__(self, config=NiceSprinklerWebServer.get_config())
         self.sprinkler_system = None
+        # the frame route has to exist before the server starts
+        CameraView.add_route()
 
         @ui.page("/remote")
         async def remote(client: Client):
