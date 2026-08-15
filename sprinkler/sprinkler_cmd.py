@@ -30,12 +30,6 @@ class NiceSprinklerCmd(WebserverCmd):
         """
         parser = super().getArgParser(description, version_msg)
         parser.add_argument(
-            "-v",
-            "--verbose",
-            action="store_true",
-            help="show verbose output [default: %(default)s]",
-        )
-        parser.add_argument(
             "--config",
             default="example_config.yaml",
             help="path to sprinkler configuration file [default: %(default)s]",
