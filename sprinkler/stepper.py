@@ -28,8 +28,10 @@ except (ImportError, RuntimeError):
     class GPIO:
         BOARD = None
         OUT = None
-        HIGH = None
-        LOW = None
+        HIGH = 1
+        LOW = 0
+        # pin states of the mock, so that reading back works off the device
+        states = {}
 
         @staticmethod
         def setmode(mode):
@@ -37,15 +39,19 @@ except (ImportError, RuntimeError):
 
         @staticmethod
         def setup(pin, mode):
-            pass
+            GPIO.states.setdefault(pin, GPIO.LOW)
 
         @staticmethod
         def output(pin, state):
-            pass
+            GPIO.states[pin] = state
+
+        @staticmethod
+        def input(pin):
+            return GPIO.states.get(pin, GPIO.LOW)
 
         @staticmethod
         def cleanup():
-            pass
+            GPIO.states.clear()
 
 
 class StepperMotor:
@@ -56,12 +62,14 @@ class StepperMotor:
         dir_pin: int,
         pul_pin: int,
         steps_per_revolution: int = 200,
+        direction: int = 1,
     ):
         self.name = name
         self.ena_pin = ena_pin
         self.dir_pin = dir_pin
         self.pul_pin = pul_pin
         self.steps_per_revolution = steps_per_revolution
+        self.direction = direction
         self.setup_gpio()
 
     def setup_gpio(self):
@@ -76,7 +84,15 @@ class StepperMotor:
     def disable(self):
         GPIO.output(self.ena_pin, GPIO.HIGH)
 
+    @property
+    def enabled(self) -> bool:
+        """The real pin state - low is enabled - rather than a remembered one."""
+        return GPIO.input(self.ena_pin) == GPIO.LOW
+
     def set_direction(self, clockwise: bool):
+        """Set the direction pin, with the configured sign of this axis."""
+        if self.direction < 0:
+            clockwise = not clockwise
         GPIO.output(self.dir_pin, GPIO.HIGH if clockwise else GPIO.LOW)
 
     def step(self, steps: int, delay: float):
@@ -88,12 +104,39 @@ class StepperMotor:
 
 
 class Move:
-    def __init__(self):
+    """
+    The motors of the machine.
+
+    One instance per process: the enable state lives in the hardware and a
+    second instance would reset it, so views share this one.
+    """
+
+    def __init__(self, config=None):
+        """
+        Args:
+            config: SprinklerConfig whose motors section carries the pins,
+                the steps per revolution and the direction sign. Without it
+                the wiring defaults of the documented build are used.
+        """
         GPIO.setmode(GPIO.BOARD)
-        self.motors: Dict[int, StepperMotor] = {
-            1: StepperMotor("Motor1", 37, 35, 33),
-            2: StepperMotor("Motor2", 31, 29, 23),
-        }
+        self.motors: Dict[int, StepperMotor] = {}
+        motors = getattr(config, "motors", None) if config else None
+        if motors:
+            for motor_id, name in ((1, "horizontal"), (2, "vertical")):
+                mc = getattr(motors, name)
+                self.motors[motor_id] = StepperMotor(
+                    name.capitalize(),
+                    mc.ena_pin,
+                    mc.dir_pin,
+                    mc.pul_pin,
+                    mc.steps_per_revolution,
+                    getattr(mc, "direction", 1),
+                )
+        else:
+            self.motors = {
+                1: StepperMotor("Motor1", 37, 35, 33),
+                2: StepperMotor("Motor2", 31, 29, 23),
+            }
 
     def enable_motor(self, motor_id: int):
         motor = self.motors.get(motor_id)

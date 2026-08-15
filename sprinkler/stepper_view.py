@@ -3,28 +3,38 @@ from dataclasses import dataclass
 from nicegui import ui
 
 from sprinkler.sprinkler_core import SprinklerSystem
-from sprinkler.stepper import Move
+from sprinkler.stepper import Move, StepperMotor
 
 
 @dataclass
 class MotorView:
+    """
+    One motor on the remote control page.
+
+    The enable state is not remembered here - it is read from the pin, so
+    a page reload or a reconnect cannot make the page and the machine
+    disagree.
+    """
+
     name: str
     id: int
+    motor: StepperMotor = None
     position: float = 0
-    enabled: bool = False
     slider: ui.slider = None
 
+    @property
+    def enabled(self) -> bool:
+        return self.motor.enabled if self.motor else False
+
     def enable(self, move_controller: Move):
-        self.enabled = True
         move_controller.enable_motor(self.id)
 
     def disable(self, move_controller: Move):
-        self.enabled = False
         move_controller.disable_motor(self.id)
 
     def move(self, move_controller: Move, angle: float, rpm: float):
         if self.enabled:
-            move_controller.move_motor(self.id, angle, rpm, keep_enabled=self.enabled)
+            move_controller.move_motor(self.id, angle, rpm, keep_enabled=True)
             self.position += angle
             if self.slider:
                 self.slider.set_value(self.position)
@@ -36,13 +46,21 @@ class MotorView:
 
 
 class StepperView:
+    """
+    Remote control page for the two stepper motors.
+    """
+
     def __init__(self, solution, sprinkler_system: SprinklerSystem, step_size: int = 2):
         self.solution = solution
         self.sprinkler_system = sprinkler_system
-        self.move_controller = Move()
+        # one controller per process - see the enable state note in Move
+        self.move_controller = getattr(solution.webserver, "move_controller", None)
+        if self.move_controller is None:
+            self.move_controller = Move(sprinkler_system.config)
+            solution.webserver.move_controller = self.move_controller
         self.step_size = step_size
-        self.motor_h = MotorView("Horizontal", 1)
-        self.motor_v = MotorView("Vertical", 2)
+        self.motor_h = MotorView("Horizontal", 1, self.move_controller.motors.get(1))
+        self.motor_v = MotorView("Vertical", 2, self.move_controller.motors.get(2))
 
     def setup_ui(self):
         with ui.card():
@@ -80,6 +98,7 @@ class StepperView:
                 ui.button("Reset", icon="restart_alt", on_click=self.reset_origin)
 
             with ui.row():
+                # the value comes from the pin, not from memory
                 ui.switch(
                     "H Motor",
                     value=self.motor_h.enabled,

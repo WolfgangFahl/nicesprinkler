@@ -194,6 +194,9 @@ class Motor:
     steps_per_revolution: int
     min_angle: int
     max_angle: int
+    # 1 keeps the wiring direction, -1 reverses this axis without a code
+    # change; the convention itself is an architecture decision
+    direction: int = 1
 
 
 @lod_storable
