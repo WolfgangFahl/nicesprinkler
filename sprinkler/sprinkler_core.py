@@ -7,6 +7,7 @@ Created on 2024-08-13
 from sprinkler.sprinkler_config import SprinklerConfig
 from sprinkler.stl3d import STL3D
 
+
 class SprinklerSystem:
     """
     Main sprinkler system class
@@ -16,6 +17,4 @@ class SprinklerSystem:
         self.config_path = config_path
         self.stl_file_path = stl_file_path
         self.config = SprinklerConfig.load_from_yaml_file(config_path)
-        self.stl=STL3D(stl_file_path)
-
-
+        self.stl = STL3D(stl_file_path)

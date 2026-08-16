@@ -75,7 +75,9 @@ class CalibrationView:
             ).props("label-always")
 
             with ui.row():
-                self.watch_button = ui.button("Start", icon="timer", on_click=self.toggle_watch)
+                self.watch_button = ui.button(
+                    "Start", icon="timer", on_click=self.toggle_watch
+                )
                 self.apply_button = ui.button(
                     "Apply to configuration", icon="save", on_click=self.apply
                 )

@@ -5,6 +5,7 @@ Created on 2024-08-13
 """
 
 import os
+import shutil
 
 from ngwidgets.input_webserver import InputWebserver, InputWebSolution
 from ngwidgets.webserver import WebserverConfig
@@ -57,21 +58,14 @@ class NiceSprinklerWebServer(InputWebserver):
         """
         Configure the run based on command line arguments
         """
-        examples_path = self.examples_path()
         if hasattr(self.args, "root_path"):
             self.root_path = self.args.root_path
         else:
-            self.root_path = examples_path
-        self.config_path = (
-            self.args.config
-            if os.path.isabs(self.args.config)
-            else os.path.join(self.root_path, self.args.config)
+            self.root_path = self.config.config_path
+        self.config_path = self.installation_path(
+            self.args.config, "example_config.yaml"
         )
-        self.stl_path = (
-            self.args.stl
-            if os.path.isabs(self.args.stl)
-            else os.path.join(self.root_path, self.args.stl)
-        )
+        self.stl_path = self.installation_path(self.args.stl, "example_garden.stl")
 
         # Create SprinklerSystem
         self.sprinkler_system = SprinklerSystem(self.config_path, self.stl_path)
@@ -80,6 +74,31 @@ class NiceSprinklerWebServer(InputWebserver):
         # Add the static files route for serving the STL files
         app.add_static_files("/examples", stl_directory)
         pass
+
+    def installation_path(self, arg_path: str, example_name: str) -> str:
+        """
+        Get the installation path for the given argument, seeded from the example.
+
+        An absolute argument is used as it stands. A relative one is resolved
+        against the installation directory of this solution; when the file is
+        missing there the example that ships with the package is copied in once,
+        so an update never touches the file the installation works with.
+
+        Args:
+            arg_path: the path as given on the command line
+            example_name: the name of the example to copy in when nothing exists
+
+        Returns:
+            the absolute path of the file to be used
+        """
+        path = arg_path
+        if not os.path.isabs(path):
+            path = os.path.join(self.root_path, path)
+        if not os.path.exists(path):
+            example = os.path.join(self.examples_path(), example_name)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            shutil.copy(example, path)
+        return path
 
     @classmethod
     def examples_path(cls) -> str:

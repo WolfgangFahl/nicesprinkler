@@ -4,13 +4,16 @@ Created on 2024-09-04
 @author: wf
 """
 
-import numpy as np
-from stl import mesh
 from typing import List
+
 import matplotlib.pyplot as plt
+import numpy as np
 from mpl_toolkits import mplot3d
 from mpl_toolkits.mplot3d import Axes3D
+from stl import mesh
+
 from sprinkler.sprinkler_config import Point3D
+
 
 class STL3D:
     """
@@ -31,7 +34,9 @@ class STL3D:
 
     def is_point_colliding_with_mesh(self, point: Point3D) -> bool:
         """Check if the point collides with any STL mesh element"""
-        point_3d = np.array([point.x * 1000, point.y * 1000, point.z * 1000])  # Convert m to mm
+        point_3d = np.array(
+            [point.x * 1000, point.y * 1000, point.z * 1000]
+        )  # Convert m to mm
         for triangle in self.stl_mesh.vectors:
             if self.point_above_triangle(point_3d, triangle):
                 return True
@@ -46,17 +51,17 @@ class STL3D:
     def visualize_trajectory(self, trajectory: List[Point3D], ax: Axes3D):
         """Visualize a trajectory in 3D"""
         x, y, z = zip(*[(p.x, p.y, p.z) for p in trajectory])
-        ax.plot(x, y, z, 'b-')
+        ax.plot(x, y, z, "b-")
 
     def create_3d_plot(self):
         """Create a 3D plot of the STL model"""
         fig = plt.figure(figsize=(12, 8))
-        ax = fig.add_subplot(111, projection='3d')
+        ax = fig.add_subplot(111, projection="3d")
         self.visualize(ax)
-        ax.set_xlabel('X (m)')
-        ax.set_ylabel('Y (m)')
-        ax.set_zlabel('Z (m)')
-        ax.set_title('STL Model')
+        ax.set_xlabel("X (m)")
+        ax.set_ylabel("Y (m)")
+        ax.set_zlabel("Z (m)")
+        ax.set_title("STL Model")
         return fig, ax
 
     def plot_trajectory(self, trajectory: List[Point3D], title: str):
@@ -64,8 +69,8 @@ class STL3D:
         fig, ax = plt.subplots(figsize=(10, 5))
         x, y, z = zip(*[(p.x, p.y, p.z) for p in trajectory])
         ax.plot(y, z)  # Plot Y vs Z for a side view
-        ax.set_xlabel('Y (m)')
-        ax.set_ylabel('Z (m)')
+        ax.set_xlabel("Y (m)")
+        ax.set_ylabel("Z (m)")
         ax.set_title(title)
         ax.grid(True)
         return fig, ax

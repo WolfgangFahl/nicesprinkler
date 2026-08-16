@@ -132,8 +132,12 @@ class Recorder:
     def angles(self) -> dict:
         """The commanded angles, or nulls when no stepper view is attached."""
         if self.stepper is None:
-            return {"commanded_h_angle": None, "commanded_v_angle": None,
-                    "h_enabled": None, "v_enabled": None}
+            return {
+                "commanded_h_angle": None,
+                "commanded_v_angle": None,
+                "h_enabled": None,
+                "v_enabled": None,
+            }
         return {
             "commanded_h_angle": self.stepper.motor_h.position,
             "commanded_v_angle": self.stepper.motor_v.position,

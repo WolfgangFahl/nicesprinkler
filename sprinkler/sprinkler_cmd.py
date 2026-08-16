@@ -31,13 +31,13 @@ class NiceSprinklerCmd(WebserverCmd):
         parser = super().getArgParser(description, version_msg)
         parser.add_argument(
             "--config",
-            default="example_config.yaml",
-            help="path to sprinkler configuration file [default: %(default)s]",
+            default="config.yaml",
+            help="path to the sprinkler configuration file, relative to the installation directory [default: %(default)s]",
         )
         parser.add_argument(
             "--stl",
-            default="example_garden.stl",
-            help="path to sprinkler configuration file [default: %(default)s]",
+            default="garden.stl",
+            help="path to the garden model, relative to the installation directory [default: %(default)s]",
         )
         return parser
 

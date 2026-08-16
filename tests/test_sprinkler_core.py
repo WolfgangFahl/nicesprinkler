@@ -4,7 +4,7 @@ Created on 2024-08-13
 @author: wf
 """
 
-from sprinkler.sprinkler_core import SprinklerSystem, SprinklerConfig
+from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
 from tests.sprinkler_base_test import SprinklerBasetest
 
 

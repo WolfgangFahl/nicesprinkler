@@ -5,11 +5,14 @@ Created on 2024-09-04
 """
 
 import os
+
 import matplotlib.pyplot as plt
-from tests.garden_example_stl3d import Garden3D
-from sprinkler.sprinkler_config import Point3D, Lawn, Hose
-from tests.sprinkler_base_test import SprinklerBasetest
+
+from sprinkler.sprinkler_config import Hose, Lawn, Point3D
 from sprinkler.waterjet import WaterJet
+from tests.garden_example_stl3d import Garden3D
+from tests.sprinkler_base_test import SprinklerBasetest
+
 
 class TestStl(SprinklerBasetest):
     """
@@ -18,7 +21,9 @@ class TestStl(SprinklerBasetest):
 
     def setUp(self, debug=True, profile=True):
         SprinklerBasetest.setUp(self, debug=debug, profile=profile)
-        self.lawn = Lawn(width=6.1, length=14.6)  # Garden dimensions from the SCAD model
+        self.lawn = Lawn(
+            width=6.1, length=14.6
+        )  # Garden dimensions from the SCAD model
         self.garden = Garden3D(self.stl_path, self.lawn)
         self.output_dir = "/tmp/stl_test_output"
         os.makedirs(self.output_dir, exist_ok=True)
@@ -47,8 +52,14 @@ class TestStl(SprinklerBasetest):
             self.garden.visualize_trajectory(trajectory, ax)
 
             # Create 2D plot
-            fig_2d, ax_2d = self.garden.plot_trajectory(trajectory, f"Trajectory (H: {h_angle}°, V: {v_angle}°)")
-            plt.savefig(os.path.join(self.output_dir, f"trajectory_2d_h{h_angle}_v{v_angle}.png"))
+            fig_2d, ax_2d = self.garden.plot_trajectory(
+                trajectory, f"Trajectory (H: {h_angle}°, V: {v_angle}°)"
+            )
+            plt.savefig(
+                os.path.join(
+                    self.output_dir, f"trajectory_2d_h{h_angle}_v{v_angle}.png"
+                )
+            )
             plt.close(fig_2d)
 
         plt.savefig(os.path.join(self.output_dir, "garden_with_trajectories_3d.png"))
@@ -69,7 +80,14 @@ class TestStl(SprinklerBasetest):
 
         collision_point = self.garden.find_collision_point(trajectory)
         if collision_point:
-            ax.plot([collision_point.x], [collision_point.y], [collision_point.z], 'ro', markersize=10, label='Collision Point')
+            ax.plot(
+                [collision_point.x],
+                [collision_point.y],
+                [collision_point.z],
+                "ro",
+                markersize=10,
+                label="Collision Point",
+            )
 
         plt.savefig(os.path.join(self.output_dir, "collision_detection_3d.png"))
         plt.close(fig)
@@ -77,9 +95,17 @@ class TestStl(SprinklerBasetest):
         # Create 2D plot of the colliding trajectory
         fig_2d, ax_2d = self.garden.plot_trajectory(trajectory, "Colliding Trajectory")
         if collision_point:
-            ax_2d.plot(collision_point.y, collision_point.z, 'ro', markersize=10, label='Collision Point')
+            ax_2d.plot(
+                collision_point.y,
+                collision_point.z,
+                "ro",
+                markersize=10,
+                label="Collision Point",
+            )
         ax_2d.legend()
         plt.savefig(os.path.join(self.output_dir, "collision_detection_2d.png"))
         plt.close(fig_2d)
 
-        self.assertIsNotNone(collision_point, "Expected a collision with the left hedge")
+        self.assertIsNotNone(
+            collision_point, "Expected a collision with the left hedge"
+        )
