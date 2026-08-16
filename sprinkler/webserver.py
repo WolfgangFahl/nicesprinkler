@@ -11,6 +11,7 @@ from ngwidgets.input_webserver import InputWebserver, InputWebSolution
 from ngwidgets.webserver import WebserverConfig
 from nicegui import Client, app, ui
 
+from sprinkler.api import SprinklerApi
 from sprinkler.calibration import CalibrationView
 from sprinkler.camera import CameraView
 from sprinkler.sprinkler_core import SprinklerConfig, SprinklerSystem
@@ -69,6 +70,8 @@ class NiceSprinklerWebServer(InputWebserver):
 
         # Create SprinklerSystem
         self.sprinkler_system = SprinklerSystem(self.config_path, self.stl_path)
+        self.api = SprinklerApi(self, self.root_path)
+        self.api.add_routes()
         stl_directory = os.path.dirname(self.stl_path)
 
         # Add the static files route for serving the STL files
