@@ -220,3 +220,6 @@ class SprinklerConfig:
     angles: Angles
     hose: Hose
     motors: Motors = field(default_factory=dict)
+    # how the camera is clamped: 0, 90, 180 or 270 degrees clockwise. Served
+    # as an exif orientation tag, so no pixel is touched
+    camera_rotation: int = 0

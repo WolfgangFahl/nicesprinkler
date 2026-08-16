@@ -70,6 +70,9 @@ class NiceSprinklerWebServer(InputWebserver):
 
         # Create SprinklerSystem
         self.sprinkler_system = SprinklerSystem(self.config_path, self.stl_path)
+        CameraView.camera.rotation = getattr(
+            self.sprinkler_system.config, "camera_rotation", 0
+        )
         self.api = SprinklerApi(self, self.root_path)
         self.api.add_routes()
         stl_directory = os.path.dirname(self.stl_path)

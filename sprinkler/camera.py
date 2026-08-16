@@ -29,7 +29,9 @@ class Camera:
         width: int = 1600,
         height: int = 896,
         fps: int = 5,
+        rotation: int = 0,
     ):
+        self.rotation = rotation
         self.device = device
         self.width = width
         self.height = height
@@ -75,9 +77,42 @@ class Camera:
                     self.latest = bytes(frame)
                     self.latest_time = time.time()
 
+    # exif orientation tag per rotation in degrees clockwise
+    orientations = {0: 1, 90: 6, 180: 3, 270: 8}
+
+    def oriented(self, jpeg: bytes) -> bytes:
+        """
+        Add the exif orientation of the configured rotation to a frame.
+
+        Only the header is rewritten - the browser turns the picture, so the
+        cost of decoding and re-encoding on the device is not paid.
+
+        Args:
+            jpeg: the frame as the camera delivered it
+
+        Returns:
+            the frame carrying the orientation tag
+        """
+        oriented = jpeg
+        orientation = self.orientations.get(self.rotation, 1)
+        if jpeg and orientation != 1:
+            # a minimal little endian exif block holding the orientation only
+            exif = (
+                b"Exif\x00\x00"
+                b"II*\x00\x08\x00\x00\x00"
+                b"\x01\x00"
+                b"\x12\x01\x03\x00\x01\x00\x00\x00"
+                + bytes([orientation, 0])
+                + b"\x00\x00"
+                b"\x00\x00\x00\x00"
+            )
+            segment = b"\xff\xe1" + (len(exif) + 2).to_bytes(2, "big") + exif
+            oriented = jpeg[:2] + segment + jpeg[2:]
+        return oriented
+
     def frame(self) -> bytes:
         """The newest frame as jpeg bytes, empty while none has arrived."""
-        return self.latest if self.latest else b""
+        return self.oriented(self.latest) if self.latest else b""
 
     def age(self) -> float:
         """Seconds since the newest frame arrived."""
@@ -95,7 +130,8 @@ class Camera:
         while True:
             if self.latest and self.latest_time != last:
                 last = self.latest_time
-                yield boundary + b"Content-Type: image/jpeg\r\n\r\n" + self.latest + b"\r\n"
+                frame = self.oriented(self.latest)
+                yield boundary + b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
             time.sleep(1.0 / (self.fps * 2))
 
 
@@ -232,6 +268,26 @@ class CameraView:
                 'alt="device camera">'
             ).classes("w-full")
             self.setup_recording()
+            self.setup_rotation()
+
+    def setup_rotation(self):
+        """Rotation button, shown only while the debug setting is on."""
+        if not self.solution.webserver.debug:
+            return
+        with ui.row().classes("items-center"):
+            self.rotation_button = ui.button(
+                f"rotate {self.camera.rotation}°",
+                icon="screen_rotation",
+                on_click=self.rotate,
+            )
+
+    def rotate(self):
+        """Step the rotation by 90 degrees and keep it in the configuration."""
+        self.camera.rotation = (self.camera.rotation + 90) % 360
+        self.rotation_button.set_text(f"rotate {self.camera.rotation}°")
+        system = self.solution.webserver.sprinkler_system
+        system.config.camera_rotation = self.camera.rotation
+        system.config.save_to_yaml_file(system.config_path)
 
     def setup_recording(self):
         """Record button and frames per minute slider."""
